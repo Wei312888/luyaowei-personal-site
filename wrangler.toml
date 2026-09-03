@@ -11,8 +11,7 @@ run_worker_first = true
 [[d1_databases]]
 binding = "DB"
 database_name = "luyaowei_site"
-# 部署时用真实 database_id 替换(wrangler d1 create / dashboard 获取)
-database_id = "00000000-0000-0000-0000-000000000000"
+database_id = "0d514799-762b-45ce-afb0-71ee6b71dfbd"
 
 [observability]
 enabled = true
