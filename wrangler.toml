@@ -1,0 +1,18 @@
+name = "luyaowei-site"
+main = "workers/app.js"
+compatibility_date = "2026-08-01"
+compatibility_flags = ["nodejs_compat"]
+
+[assets]
+directory = "./public"
+binding = "ASSETS"
+run_worker_first = true
+
+[[d1_databases]]
+binding = "DB"
+database_name = "luyaowei_site"
+# 部署时用真实 database_id 替换(wrangler d1 create / dashboard 获取)
+database_id = "00000000-0000-0000-0000-000000000000"
+
+[observability]
+enabled = true
