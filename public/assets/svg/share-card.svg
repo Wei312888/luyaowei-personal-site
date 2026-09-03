@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" role="img" aria-labelledby="sc-title sc-desc" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif">
+  <title id="sc-title">陆耀威 · 个人档案 分享卡片</title>
+  <desc id="sc-desc">克莱因蓝底分享卡片:陆耀威,嵌入式 × AI / Agent / MCP 工程师,附邮箱与广西梧州。</desc>
+
+  <rect width="1200" height="630" fill="#002FA7"/>
+
+  <!-- 内框(编辑气息) -->
+  <rect x="36" y="36" width="1128" height="558" fill="none" stroke="#FAFAF7" opacity="0.22" stroke-width="1.5"/>
+
+  <!-- 顶部小标 -->
+  <text x="120" y="164" font-family="ui-monospace,&quot;SF Mono&quot;,Consolas,monospace" font-size="19" letter-spacing="3" fill="#FAFAF7" opacity="0.82">PERSONAL PROFILE · 个人档案</text>
+
+  <!-- 名字(衬线大字) -->
+  <text x="120" y="286" font-family="&quot;Noto Serif SC&quot;,&quot;Songti SC&quot;,&quot;SimSun&quot;,serif" font-size="96" fill="#FAFAF7">陆耀威</text>
+
+  <!-- 中文名注音 -->
+  <text x="120" y="330" font-family="ui-monospace,&quot;SF Mono&quot;,Consolas,monospace" font-size="19" letter-spacing="6" fill="#FAFAF7" opacity="0.85">LU YAOWEI</text>
+
+  <!-- 定位行 -->
+  <text x="120" y="392" font-size="30" fill="#FAFAF7">嵌入式 × AI · Agent / MCP 工程师</text>
+
+  <!-- 分隔线 -->
+  <line x1="120" y1="428" x2="1080" y2="428" stroke="#FAFAF7" opacity="0.35"/>
+
+  <!-- 项目与能力 -->
+  <text x="120" y="480" font-size="22" fill="#FAFAF7" opacity="0.92">独立完成 EDA Agent 桥 · wei+ 信号串口助手 · 3 个 STM32 信号系统</text>
+  <text x="120" y="516" font-size="22" fill="#FAFAF7" opacity="0.92">支持对话问答 · 直问 EDA Agent 桥 / wei+ 串口助手</text>
+
+  <!-- 底部联系方式(等宽) -->
+  <text x="120" y="560" font-family="ui-monospace,&quot;SF Mono&quot;,Consolas,monospace" font-size="18" fill="#FAFAF7" opacity="0.8">luyaowei9930@163.com · 广西梧州</text>
+
+  <!-- 右下角署名(极弱) -->
+  <text x="1064" y="560" text-anchor="end" font-family="ui-monospace,&quot;SF Mono&quot;,Consolas,monospace" font-size="14" fill="#FAFAF7" opacity="0.5">LYW · 2025</text>
+</svg>

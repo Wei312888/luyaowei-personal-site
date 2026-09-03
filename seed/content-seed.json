@@ -1,0 +1,348 @@
+{
+  "_meta": {
+    "source": "陆耀威个人简历-嵌入式ai工程师.docx（2026-08-24）+ 陆耀威-项目说明.txt",
+    "confirmed": "2026-09-02 经站主逐项确认：EDA桥数字口径按简历（4 MCP工具/5 HTTP接口）；实习只展示 2026.08；三个硬件项目标已完成+时间待补充；仅展示邮箱",
+    "updated": "site-upgrade：补充校园经历（贺州学院电子设计竞赛基地·会长）、projectDocs（eda-agent-bridge、wei-plus 两个旗舰项目深度文档），并扩展实习内容模型（internship 拆分为 4 个子模块 + takeaway）"
+  },
+  "profile": {
+    "name": "陆耀威",
+    "intent": "求职意向：AI Agent 工程师 / 嵌入式 AI 工程师（实习）",
+    "location": "广西梧州",
+    "politics": "共青团员",
+    "email": "luyaowei9930@163.com",
+    "summary": "我独立完成了嘉立创 EDA Agent 桥（扩展 + 网关 + MCP，让 Agent 用自然语言读写原理图）、wei+ 串口助手（GUI / CLI / MCP / HTTP 四接口）等 AI 工具，熟练使用 Codex、Claude Code 进行 AI 辅助开发，理解 MCP 协议与工具调用循环并独立编写配套 Skills；兼具嵌入式软硬件开发（3 个 STM32 信号处理系统）与一线硬件测试经验，能快速学习新技术并持续深耕单一方向，具备「嵌入式 × AI」双栈交付能力。",
+    "selfEval": "我对 AI Agent 与工具链有持续热情，独立开发过 MCP 服务与多接口工具，能快速学习新语言与框架；工程基础扎实（嵌入式 + 硬件测试），做事严谨，愿意长期专注单一方向并持续优化。具备「嵌入式 × AI」双栈能力，既懂硬件物理世界，也能用 Agent/MCP 将其智能化。",
+    "education": {
+      "school": "贺州学院",
+      "major": "网络工程（本科）",
+      "period": "2024.09 – 至今",
+      "gpa": "GPA 3.2 / 4.5（专业前 7%）",
+      "courses": "C语言、C++、数据结构、模拟电路设计、数字电路设计、电路分析、MySQL 数据库原理、计算机原理"
+    },
+    "skills": [
+      {
+        "group": "Agent / MCP",
+        "items": "MCP 协议与 Server 开发、工具调用循环、Skill 编写与触发配置；Codex / Claude Code / Open Claw / OpenCode"
+      },
+      {
+        "group": "嘉立创 EDA 插件",
+        "items": "独立完成 EDA Agent 桥（扩展 + 网关 + MCP），熟悉 Pro API（sch_PrimitiveComponent、sys_WebSocket 等）"
+      },
+      {
+        "group": "工具",
+        "items": "Keil / VS Code / 串口屏开发 / allegro / AD / 嘉立创 EDA"
+      },
+      {
+        "group": "语言",
+        "items": "Python（MCP / 工具开发）、C/C++（嵌入式）；TypeScript / Node.js"
+      },
+      {
+        "group": "嵌入式",
+        "items": "STM32（标准库 / HAL）、UART / SPI / I2C / PWM / 定时器 / DMA、DDS、ADC / DAC、FFT / FIR"
+      },
+      {
+        "group": "硬件",
+        "items": "焊接调试、示波器、万用表、信号发生器、稳压电源、频谱分析仪、硬件测试全流程"
+      },
+      {
+        "group": "证书",
+        "items": "C1 机动车驾驶证"
+      }
+    ]
+  },
+  "projects": [
+    {
+      "id": 1,
+      "name": "EDA Agent 桥（嘉立创 EDA 扩展 + 网关 + MCP）",
+      "tag": "独立开发",
+      "stack": "TypeScript / Node.js · MCP · WebSocket · 嘉立创 Pro API",
+      "period": "",
+      "bullets": [
+        "独立完成一个把嘉立创 EDA 专业版能力暴露给外部 AI Agent 的插件，实现「读图 → 检查 → 定位 → 改图」完整闭环。",
+        "架构：EDA 扩展（TypeScript）→ 本地网关（Node.js，HTTP + WebSocket）→ MCP Server（stdio）→ Codex / Claude Code，Agent 可用自然语言直接读写原理图。",
+        "提供 4 个 MCP 工具、5 个 HTTP 接口：读取选中图元、检查重复位号、自动选中重复器件、一键修复重复位号、健康检查；用 Pro API（sch_PrimitiveComponent.getAll / modify / doSelectPrimitives）实现读图定位与自动改名。",
+        "请求通过唯一 ID 关联响应，读操作并行、写操作串行，体现工具调用编排的调度设计；解决 EDA WebSocket 仅作客户端、扩展启动时序、.edaignore 打包、同 UUID 覆盖等工程问题。",
+        "独立编写配套 Skill，封装「检查原理图重复位号」的调用参数与诊断流程，让 Agent 一次提示即触发完整检查链路。",
+        "成果：对 48 个元件的原理图，Agent 可自然语言定位并修复重复位号，形成可现场演示的完整案例。"
+      ],
+      "link": "",
+      "image": "",
+      "imageWidth": 100
+    },
+    {
+      "id": 2,
+      "name": "wei+ 嵌入式信号串口助手",
+      "tag": "独立开发",
+      "stack": "Python · PyInstaller · MCP",
+      "period": "",
+      "bullets": [
+        "自研串口助手，同时提供 GUI、CLI、MCP 与本地 HTTP API 四种访问方式，覆盖数据采集、波形显示、FFT 分析与历史存储。",
+        "实现 MCP Server（wei_list_ports / wei_get_status / wei_read_since / wei_send_command / wei_clear_data），使 Codex、DSH、Claude 等 Agent 可直接读取并控制串口设备，打通「物理设备 ↔ AI Agent」链路。",
+        "设计并解析 RawData / FireWater(CSV) / JustFloat(float32) 三种协议，支持时间戳增量读取与有界查询。",
+        "独立编写配套 wei-plus Skill，定义串口配置、端口枚举与数据读取的参数规范，使 Agent 能「一句话」完成串口采集与分析任务。",
+        "使用 PyInstaller 打包分发，内置数据库与信号分析功能。"
+      ],
+      "link": "https://github.com/Wei312888/wei-plus-serial-assistant",
+      "image": "",
+      "imageWidth": 100
+    },
+    {
+      "id": 3,
+      "name": "周期信号测量分析装置（简易示波器）",
+      "tag": "独立完成",
+      "stack": "STM32H743 + AD9226 · FFT / FIR / Goertzel",
+      "period": "",
+      "bullets": [
+        "独立完成方案设计、嵌入式软件、硬件调试与串口屏 / 上位机联调。",
+        "软件：TIM2 输出 8MHz 采样 + DMA 并行采样；96 阶 Kaiser FIR 抗混叠滤波 + 4 倍抽取 + Hann 窗 FFT，频率分辨率 488Hz，稳定识别基波与 2–5 次谐波；实时监测干扰并启用高频增益校正。",
+        "硬件：完成 50Ω 阻抗匹配、前端增益标定、12 位并行数据线重映射，编写 GPIO 扫描工具定位虚焊 / 错线。",
+        "指标：Vpp / 真有效值 / 基频 / 谐波幅值误差 ≤1mV、基频误差 ≤0.5kHz，按键后 1 秒内显示；500kHz / 250mVpp 关键点实测误差约 1mV。",
+        "超出完成指标：可采集三角波、方波，可在滤波部分滤出 600kHz 及其以上的干扰杂波。"
+      ],
+      "link": "",
+      "image": "",
+      "imageWidth": 100
+    },
+    {
+      "id": 4,
+      "name": "模拟信号无线收发机",
+      "tag": "团队项目 · 负责发射端调制",
+      "stack": "STM32F103 + AD9959 DDS + AD835 乘法器",
+      "period": "",
+      "bullets": [
+        "基于 AD9959 四通道 DDS 与 AD835 四象限乘法器，实现 AM 模拟信号「调制—传输—解调」全链路。",
+        "负责发射端调制：STM32 经模拟 SPI 驱动 AD9959，配合 12 位 DAC 与加法器实现 20%–90% 调制度数字化精确控制。",
+        "接收端搭建 LC 选频 + 低噪放 + OPA691 级联放大与二极管包络检波链路；串口触摸屏指令解析与参数回显。",
+        "成果：130cm 距离完整 AM 传输，调制度与载波频率误差均 <7%；信号频率扩展至 50Hz–10kHz，满足 25kHz 信道带宽限制。"
+      ],
+      "link": "",
+      "image": "",
+      "imageWidth": 100
+    },
+    {
+      "id": 5,
+      "name": "宽带混合信号分离与锁相重建系统",
+      "tag": "",
+      "stack": "STM32F407 + FFT + AD9833 DDS",
+      "period": "",
+      "bullets": [
+        "反相加法器前端调理电路，将双极性混合信号线性搬移至 ADC 单极性采集窗口。",
+        "基于 FFT（1.024MHz 采样、1kHz 分辨率）自动判别正弦 / 三角波并提取频率，从根源消除频谱泄漏。",
+        "驱动 AD9833 DDS 重建峰峰值 ≥2V 同频无偏置波形；状态机架构，单次触发 1 秒内完成全流程。"
+      ],
+      "link": "",
+      "image": "",
+      "imageWidth": 100
+    }
+  ],
+  "progress": [
+    {
+      "id": 1,
+      "project": "EDA Agent 桥",
+      "status": "迭代推进中",
+      "note": "已产出 v0.9.0 扩展安装包，可直接导入嘉立创 EDA 专业版并接入 Claude Code / Codex（2026.08.17 – 08.23 完成主体迭代）。"
+    },
+    {
+      "id": 2,
+      "project": "wei+ 嵌入式信号串口助手",
+      "status": "持续迭代中",
+      "note": "已交付 GUI / CLI / MCP / HTTP 四接口版本并完成 PyInstaller 打包；起始开发时间待补充。"
+    },
+    {
+      "id": 3,
+      "project": "周期信号测量分析装置（简易示波器）",
+      "status": "已完成",
+      "note": "各项指标实测达标，部分指标超出题目要求；具体完成时间待补充。"
+    },
+    {
+      "id": 4,
+      "project": "模拟信号无线收发机",
+      "status": "已完成",
+      "note": "全链路联调通过，指标实测达标；具体完成时间待补充。"
+    },
+    {
+      "id": 5,
+      "project": "宽带混合信号分离与锁相重建系统",
+      "status": "已完成",
+      "note": "单次触发 1 秒内完成全流程；具体完成时间待补充。"
+    }
+  ],
+  "campus": [
+    {
+      "id": 1,
+      "title": "电子基地 会长",
+      "org": "贺州学院 · 电子设计竞赛基地",
+      "period": "2024.09 – 至今",
+      "detail": "负责电子设计竞赛基地的日常管理与运行；组织成员备赛、组织参与各类科创竞赛；以老带新教授电路设计、焊接调试与单片机基础，帮助新成员快速上手。"
+    }
+  ],
+  "honors": [
+    {
+      "id": 1,
+      "name": "第七届国际青年人工智能大赛 · 智能驾驶赛",
+      "detail": "三等奖",
+      "year": "2025",
+      "image": "",
+      "imageWidth": 100
+    },
+    {
+      "id": 2,
+      "name": "第十六届蓝桥杯单片机赛道",
+      "detail": "省级一等奖",
+      "year": "2025",
+      "image": "",
+      "imageWidth": 100
+    },
+    {
+      "id": 3,
+      "name": "第十七届蓝桥杯单片机赛道",
+      "detail": "省级二等奖",
+      "year": "2026",
+      "image": "",
+      "imageWidth": 100
+    },
+    {
+      "id": 4,
+      "name": "全国大学生电子设计竞赛 广西赛区",
+      "detail": "省级三等奖",
+      "year": "2026",
+      "image": "",
+      "imageWidth": 100
+    }
+  ],
+  "internship": [
+    {
+      "id": 1,
+      "company": "广东华庄科技股份有限公司",
+      "role": "硬件测试工程师助理（嵌入式方向）",
+      "dept": "事业二部 MI 制造部测试组（比亚迪 / 松下 / 丰田一级供应商）",
+      "period": "2026.08",
+      "bullets": [
+        "完成 80+ 块车载模组样板上电前安全检测，提前规避 3 起烧板风险；按规范提交有效缺陷 26 项（严重 3 项、一般 15 项），参与回归验证形成闭环。",
+        "执行电源纹波、上电瞬态、UART 通信时序等测试，协助定位 2 起引脚虚焊导致的通信异常。",
+        "对照原理图完成 12 款新品样板 BOM 初核与元器件型号 / 封装校验，维护测试日志与 ECO 记录。"
+      ],
+      "modules": [
+        {
+          "title": "岗前规范培训",
+          "summary": "入职即接受 ESD 防护、仪器使用规范与缺陷平台（四级分级）训练，随即投入新品样板 BOM 核验。",
+          "bullets": [
+            "掌握 ESD 防护要求，以及示波器、万用表、稳压电源等仪器的使用规范。",
+            "熟悉缺陷管理平台上报流程与四级分级口径。",
+            "对照原理图完成 12 款新品样板 BOM 初核与元器件型号 / 封装校验。"
+          ]
+        },
+        {
+          "title": "嵌入式基础测试执行",
+          "summary": "执行上电前安全检测与电源、时钟、串口时序等基础测试，从源头规避烧板与通信异常。",
+          "bullets": [
+            "完成 80+ 块车载模组样板上电前安全检测，提前规避 3 起烧板风险。",
+            "执行电源纹波、上电瞬态、UART 通信时序等测试，协助定位 2 起引脚虚焊导致的通信异常。"
+          ]
+        },
+        {
+          "title": "缺陷管理与闭环",
+          "summary": "按规范记录缺陷、跟进回归验证形成闭环，并掌握致命缺陷的突发处置。",
+          "bullets": [
+            "按规范提交有效缺陷 26 项（严重 3 项、一般 15 项），参与回归验证形成闭环。",
+            "掌握致命缺陷的应急上报与隔离流程，明确异常逐级反馈机制。"
+          ]
+        },
+        {
+          "title": "测试文档与实验室运维",
+          "summary": "负责测试日志、波形归档与 ECO 记录，并参与仪器校准与团队报告统计。",
+          "bullets": [
+            "维护测试日志与波形归档，按规范管理 ECO（工程变更）记录。",
+            "参与仪器日常校准与实验室运维，协助团队测试报告与数据统计。"
+          ]
+        }
+      ],
+      "takeaway": "这段实习让我把课堂里的嵌入式与硬件知识真正落到产线上。从 ESD 防护到仪器操作，从 BOM 核验到上电检测与时钟、串口时序测试，再到缺陷上报与回归闭环，我第一次完整走完「设计—测试—缺陷—闭环」的硬件质量管理链路。最大的收获是严谨与闭环意识：每一个测试结果都要有凭据，每一个缺陷都要跟到底；也更清楚自己适合在「嵌入式 × AI」方向持续深耕。",
+      "image": "",
+      "imageWidth": 100
+    }
+  ],
+  "projectDocs": {
+    "eda-agent-bridge": {
+      "slug": "eda-agent-bridge",
+      "name": "EDA Agent 桥（嘉立创 EDA 扩展 + 网关 + MCP）",
+      "tagline": "让 AI Agent 用自然语言直接读写嘉立创 EDA 专业版的原理图",
+      "stack": "TypeScript / Node.js · MCP · WebSocket · 嘉立创 Pro API",
+      "summary": "一个把嘉立创 EDA 专业版能力暴露给外部 AI Agent 的插件，完整实现「读图 → 检查 → 定位 → 改图」闭环：Agent 用自然语言即可读取原理图、检查重复位号、定位重复元件并一键修复。",
+      "diagram": "/assets/svg/eda-agent-bridge.svg",
+      "architecture": [
+        { "label": "外部 AI Agent", "detail": "Codex / Claude Code，通过 MCP（stdio）调用工具，用自然语言下达指令。" },
+        { "label": "MCP Server", "detail": "Node.js 实现，按 MCP 协议暴露工具，解析 Agent 意图并转发到本地网关。" },
+        { "label": "本地网关", "detail": "Node.js，HTTP + WebSocket；请求以唯一 ID 关联响应，读操作并行、写操作串行。" },
+        { "label": "EDA 扩展", "detail": "TypeScript，运行在嘉立创 EDA 专业版内，调用 Pro API（sch_PrimitiveComponent.getAll / modify / doSelectPrimitives）。" },
+        { "label": "嘉立创 EDA 专业版", "detail": "承载原理图数据，通过 WebSocket 与扩展双向通信。" }
+      ],
+      "mcpTools": [
+        { "name": "read_selected", "description": "读取当前在 EDA 中选中的原理图图元及位号、器件、坐标等属性。" },
+        { "name": "check_duplicate_refdes", "description": "扫描原理图，检测重复 / 冲突位号，返回问题清单。" },
+        { "name": "select_duplicate_refdes", "description": "自动定位并选中所有重复位号对应的器件，便于人工确认。" },
+        { "name": "fix_duplicate_refdes", "description": "依据规则自动重命名重复位号，一键修复位号冲突。" }
+      ],
+      "httpEndpoints": [
+        { "method": "GET", "path": "/api/selected", "purpose": "读取选中图元。" },
+        { "method": "POST", "path": "/api/check-duplicates", "purpose": "检查原理图重复位号。" },
+        { "method": "POST", "path": "/api/select-duplicates", "purpose": "自动选中重复器件。" },
+        { "method": "POST", "path": "/api/fix-duplicates", "purpose": "一键修复重复位号。" },
+        { "method": "GET", "path": "/api/health", "purpose": "网关 / 扩展健康检查。" }
+      ],
+      "challenges": [
+        { "title": "EDA WebSocket 仅作客户端", "solution": "扩展无法作为服务端直接接收请求，由本地网关作为中间层桥接双向通信。" },
+        { "title": "扩展启动时序", "solution": "扩展与网关启动存在连接竞态，网关层做握手与就绪探测，保证连接稳定。" },
+        { "title": ".edaignore 打包", "solution": "精确配置 .edaignore，打包时只保留扩展所需文件，避免无关文件进入安装包。" },
+        { "title": "同 UUID 覆盖", "solution": "请求 / 数据对象同 UUID 易被覆盖，改为按请求分配唯一 ID 并让写操作串行化。" }
+      ],
+      "results": [
+        "对 48 个元件的原理图，Agent 可自然语言定位并修复重复位号，形成可现场演示的完整案例。",
+        "读操作并行、写操作串行的调度设计，体现工具调用编排能力。",
+        "独立编写配套 Skill，封装「检查原理图重复位号」的调用参数与诊断流程，一次提示即触发完整检查链路。"
+      ],
+      "link": ""
+    },
+    "wei-plus": {
+      "slug": "wei-plus",
+      "name": "wei+ 嵌入式信号串口助手",
+      "tagline": "一套串口助手，同时打通 GUI、CLI、MCP 与 HTTP 四种访问方式",
+      "stack": "Python · PyInstaller · MCP",
+      "summary": "自研嵌入式信号串口助手，同时提供 GUI、CLI、MCP 与本地 HTTP API 四种访问方式，覆盖数据采集、波形显示、FFT 分析与历史存储，并打通「物理设备 ↔ AI Agent」链路。",
+      "diagram": "/assets/svg/wei-plus.svg",
+      "architecture": [
+        { "label": "访问层", "detail": "GUI 桌面端 / CLI 子命令 / MCP Server / 本地 HTTP API，四种方式指向同一核心引擎。" },
+        { "label": "核心引擎", "detail": "端口管理（枚举 / 打开 / 关闭）、数据采集循环、信号分析（波形 / FFT）、历史存储（内置数据库）。" },
+        { "label": "协议解析", "detail": "统一适配 RawData / FireWater(CSV) / JustFloat(float32) 三种协议，支持时间戳增量读取与有界查询。" },
+        { "label": "对外接口", "detail": "MCP Server 暴露 5 个工具；HTTP API 暴露 REST 接口；CLI / GUI 亦为薄封装，共享同一状态机。" },
+        { "label": "物理设备", "detail": "串口设备经采集循环写入数据，Agent 可通过 MCP 直接读取并控制。" }
+      ],
+      "mcpTools": [
+        { "name": "wei_list_ports", "description": "枚举系统可用串口及其信息。" },
+        { "name": "wei_get_status", "description": "获取当前设备 / 采集状态。" },
+        { "name": "wei_read_since", "description": "自指定时间戳起增量读取数据。" },
+        { "name": "wei_send_command", "description": "向串口设备发送命令。" },
+        { "name": "wei_clear_data", "description": "清空缓存数据。" }
+      ],
+      "httpEndpoints": [
+        { "method": "GET", "path": "/api/ports", "purpose": "枚举可用串口。" },
+        { "method": "GET", "path": "/api/status", "purpose": "查询采集 / 设备状态。" },
+        { "method": "GET", "path": "/api/data", "purpose": "读取采集数据（支持时间戳增量 / 有界查询）。" },
+        { "method": "POST", "path": "/api/command", "purpose": "向串口设备下发命令。" },
+        { "method": "POST", "path": "/api/clear", "purpose": "清空缓存数据。" }
+      ],
+      "challenges": [
+        { "title": "三种协议并存解析", "solution": "设计统一协议适配层，严格解析 RawData / FireWater(CSV) / JustFloat(float32) 并校验，支持时间戳增量读取与有界查询。" },
+        { "title": "多接口状态一致性", "solution": "GUI / CLI / MCP / HTTP 四接口共享单一状态机，避免状态漂移。" },
+        { "title": "采集与历史存储", "solution": "内置数据库增量写入采集数据，支持回放与有界查询。" }
+      ],
+      "results": [
+        "已交付 GUI / CLI / MCP / HTTP 四接口版本，打通「物理设备 ↔ AI Agent」链路。",
+        "5 个 MCP 工具覆盖端口枚举、状态、数据读取、命令下发与清空，Codex、DSH、Claude 等 Agent 可直接读取并控制串口设备。",
+        "使用 PyInstaller 打包分发，内置数据库与信号分析功能。",
+        "独立编写配套 wei-plus Skill，定义串口配置、端口枚举与数据读取参数规范，Agent 可「一句话」完成串口采集与分析。"
+      ],
+      "link": ""
+    }
+  }
+}

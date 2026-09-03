@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>陆耀威 · 嵌入式 × AI</title>
+<meta name="description" content="陆耀威的个人档案与项目记录，支持对话问答：AI Agent / 嵌入式 AI、EDA Agent 桥、wei+ 串口助手等。">
+<!-- SEO / Open Graph / 分享（og:image 指向克莱因蓝分享卡片） -->
+<meta property="og:title" content="陆耀威 · 嵌入式 × AI">
+<meta property="og:description" content="陆耀威的个人档案与项目记录，支持对话问答：AI Agent / 嵌入式 AI、EDA Agent 桥与 wei+ 串口助手等两大旗舰项目。">
+<meta property="og:image" content="https://luyaowei-personal-site.onrender.com/assets/svg/share-card.png">
+<meta property="og:url" content="https://luyaowei-personal-site.onrender.com/">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://luyaowei-personal-site.onrender.com/">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Person","name":"陆耀威","url":"https://luyaowei-personal-site.onrender.com/","jobTitle":"AI Agent 工程师 / 嵌入式 AI 工程师","email":"mailto:luyaowei9930@163.com","address":{"@type":"PostalAddress","addressLocality":"广西梧州"}}
+</script>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Crect%20width='64'%20height='64'%20fill='%23002FA7'/%3E%3Ctext%20x='32'%20y='48'%20font-family='Noto%20Serif%20SC,SimSun,serif'%20font-size='42'%20fill='%23FAFAF7'%20text-anchor='middle'%3E%E9%99%86%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+
+<!-- 窄顶栏：品牌 + 编号目录 + 问问我（打开右下角浮层） -->
+<header class="site-head">
+  <div class="head-inner">
+    <a class="brand" href="#top">
+      <span class="brand-name">陆耀威</span>
+      <span class="brand-en">LU YAOWEI</span>
+    </a>
+    <nav class="toc" id="toc" aria-label="编号目录">
+      <a href="#profile"><span class="num">01</span>个人</a>
+      <a href="#projects"><span class="num">02</span>项目</a>
+      <a href="#progress"><span class="num">03</span>进程</a>
+      <a href="#campus"><span class="num">04</span>校园</a>
+      <a href="#honors"><span class="num">05</span>荣誉</a>
+      <a href="#internship"><span class="num">06</span>实习</a>
+    </nav>
+    <button class="ask-btn" id="ask-open-head" type="button">问问我</button>
+  </div>
+</header>
+
+<main id="top">
+  <!-- AI-first 首屏：身份行(姓名/一句话卖点/元信息) + 大号常展开 AI 对话面板。
+       内容均由 GET /api/content 填充，HTML 不硬编码简历内容。 -->
+  <section class="hero" aria-label="开篇">
+    <h1 class="intro-name" id="intro-name"></h1>
+    <p class="intro-intent" id="intro-intent"></p>
+    <p class="intro-meta" id="intro-meta"></p>
+    <p class="load-error" id="load-error" hidden>内容加载失败，请稍后刷新。</p>
+
+    <!-- 大号常展开 AI 面板：首屏主角。与右下角浮层共用同一套消息渲染 / SSE 流式状态(createChatUI)。 -->
+    <div class="qa-hero" id="qa-hero">
+      <p class="qa-label">QUICK ASK · 依据站点公开内容回答</p>
+      <p class="qa-welcome">你好，我是陆耀威的站点分身。下面的公开内容——项目、技能、实习、校园经历——都可以问我。</p>
+      <form class="qa-form" id="qa-form">
+        <input id="qa-input" type="text" placeholder="有问题可以问陆耀威，直接输入…" autocomplete="off" aria-label="输入问题" maxlength="200">
+      </form>
+      <div class="qa-suggest" id="qa-suggest">
+        <button type="button" data-q="EDA Agent 桥是怎么工作的？">EDA Agent 桥是怎么工作的？</button>
+        <button type="button" data-q="wei+ 串口助手能做什么？">wei+ 串口助手能做什么？</button>
+        <button type="button" data-q="你会哪些技能？">你会哪些技能？</button>
+      </div>
+      <div class="qa-flow" id="qa-flow" hidden>
+        <div class="qa-msgs" id="qa-msgs"></div>
+        <p class="qa-foot">由陆耀威自建的个人AI向您回答</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 展示区：以下六类内容全部由 GET /api/content 动态渲染，位于 AI 面板下方 -->
+  <section id="profile" aria-labelledby="t-profile">
+    <header class="sec-head">
+      <p class="sec-no"><span class="no">01</span> / PROFILE</p>
+      <h2 id="t-profile">个人介绍</h2>
+    </header>
+    <div class="frame"><div class="sec-body" data-body="profile"></div></div>
+  </section>
+
+  <section id="projects" aria-labelledby="t-projects">
+    <header class="sec-head">
+      <p class="sec-no"><span class="no">02</span> / PROJECTS</p>
+      <h2 id="t-projects">项目作品</h2>
+    </header>
+    <div class="frame"><div class="sec-body" data-body="projects"></div></div>
+  </section>
+
+  <section id="progress" aria-labelledby="t-progress">
+    <header class="sec-head">
+      <p class="sec-no"><span class="no">03</span> / PROGRESS</p>
+      <h2 id="t-progress">项目进程</h2>
+    </header>
+    <div class="frame"><div class="sec-body" data-body="progress"></div></div>
+  </section>
+
+  <section id="campus" aria-labelledby="t-campus">
+    <header class="sec-head">
+      <p class="sec-no"><span class="no">04</span> / CAMPUS</p>
+      <h2 id="t-campus">校园经历</h2>
+    </header>
+    <div class="frame"><div class="sec-body" data-body="campus"></div></div>
+  </section>
+
+  <section id="honors" aria-labelledby="t-honors">
+    <header class="sec-head">
+      <p class="sec-no"><span class="no">05</span> / HONORS</p>
+      <h2 id="t-honors">荣誉奖项</h2>
+    </header>
+    <div class="frame"><div class="sec-body" data-body="honors"></div></div>
+  </section>
+
+  <section id="internship" aria-labelledby="t-internship">
+    <header class="sec-head">
+      <p class="sec-no"><span class="no">06</span> / INTERNSHIP</p>
+      <h2 id="t-internship">实习经历</h2>
+    </header>
+    <div class="frame"><div class="sec-body" data-body="internship"></div></div>
+  </section>
+</main>
+
+<footer class="site-foot">
+  <div class="foot-inner">
+    <a class="foot-mail" id="foot-email" href="#" hidden></a>
+    <p class="foot-note">本站由我自己搭建，内容在管理端维护。</p>
+  </div>
+</footer>
+
+<!-- 对话入口（右下角固定） -->
+<button class="ask-fab" id="ask-open-fab" type="button">问问我</button>
+
+<!-- 对话浮层：纸面同风格，SSE 流式渲染，与首屏 AI 面板共用同一套实现 -->
+<section class="chat-panel" id="chat-panel" hidden aria-label="站内问答">
+  <header class="chat-head">
+    <p class="chat-title">问问我</p>
+    <button class="chat-close" id="chat-close" type="button">关闭</button>
+  </header>
+  <div class="chat-msgs" id="chat-msgs">
+    <div class="chat-msg chat-note"><p class="text">这里是陆耀威的站点分身，只依据本站公开内容回答。可以从下面的问题开始。</p></div>
+  </div>
+  <div class="chat-suggest" id="chat-suggest">
+    <button type="button" data-q="EDA Agent 桥是怎么工作的？">EDA Agent 桥是怎么工作的？</button>
+    <button type="button" data-q="wei+ 串口助手能做什么？">wei+ 串口助手能做什么？</button>
+    <button type="button" data-q="你会哪些技能？">你会哪些技能？</button>
+  </div>
+  <form class="chat-form" id="chat-form">
+    <input id="chat-input" type="text" placeholder="输入问题，回车发送" autocomplete="off" aria-label="输入问题">
+    <button type="submit" id="chat-send">发送</button>
+  </form>
+  <p class="chat-foot">由陆耀威自建的个人AI向您回答</p>
+</section>
+
+<script src="/assets/site.js"></script>
+</body>
+</html>

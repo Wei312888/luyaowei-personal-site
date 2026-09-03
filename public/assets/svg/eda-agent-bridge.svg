@@ -1,0 +1,125 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 760" role="img" aria-labelledby="eab-title eab-desc" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif">
+  <title id="eab-title">EDA Agent 桥 · 三层架构图</title>
+  <desc id="eab-desc">外部 AI Agent 经 MCP Server 与本地网关桥接,驱动嘉立创 EDA 扩展,实现自然语言读写原理图的三层架构示意。</desc>
+
+  <defs>
+    <marker id="eabArr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#1A1A1A"/>
+    </marker>
+    <marker id="eabArrAcc" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#002FA7"/>
+    </marker>
+  </defs>
+
+  <!-- 标题区 -->
+  <g>
+    <text x="80" y="44" font-family="ui-monospace,&quot;SF Mono&quot;,Consolas,monospace" font-size="14" letter-spacing="2" fill="#002FA7">ARCHITECTURE · 三层架构</text>
+    <text x="80" y="84" font-family="&quot;Noto Serif SC&quot;,&quot;Songti SC&quot;,&quot;SimSun&quot;,serif" font-size="34" fill="#1A1A1A">EDA Agent 桥</text>
+    <text x="80" y="110" font-size="14" fill="#6F6C64">把嘉立创 EDA 专业版能力暴露给外部 AI Agent · 读图 → 检查 → 定位 → 改图</text>
+  </g>
+
+  <!-- 主链路(5 节点) -->
+  <g>
+    <!-- box1 Agent -->
+    <g>
+      <rect x="100" y="200" width="168" height="110" fill="#FFFFFF" stroke="#E7E4DB"/>
+      <text x="184" y="240" text-anchor="middle" font-size="19" fill="#1A1A1A">外部 AI Agent</text>
+      <text x="184" y="264" text-anchor="middle" font-size="13" fill="#6F6C64">Codex / Claude Code</text>
+      <text x="184" y="292" text-anchor="middle" font-family="ui-monospace,&quot;SF Mono&quot;,Consolas,monospace" font-size="11" fill="#6F6C64">自然语言读写原理图</text>
+    </g>
+    <!-- box2 MCP Server -->
+    <g>
+      <rect x="308" y="200" width="168" height="110" fill="#FFFFFF" stroke="#E7E4DB"/>
+      <text x="392" y="240" text-anchor="middle" font-size="19" fill="#1A1A1A">MCP Server</text>
+      <text x="392" y="264" text-anchor="middle" font-size="13" fill="#6F6C64">stdio 进程间通信</text>
+      <text x="392" y="292" text-anchor="middle" font-family="ui-monospace,&quot;SF Mono&quot;,Consolas,monospace" font-size="11" fill="#002FA7">4 MCP 工具</text>
+    </g>
+    <!-- box3 本地网关 (桥) -->
+    <g>
+      <rect x="516" y="200" width="168" height="110" fill="#FFFFFF" stroke="#002FA7" stroke-width="1.5"/>
+      <text x="600" y="240" text-anchor="middle" font-size="19" fill="#002FA7">本地网关</text>
+      <text x="600" y="264" text-anchor="middle" font-size="13" fill="#6F6C64">Node.js 桥接层</text>
+      <text x="600" y="292" text-anchor="middle" font-family="ui-monospace,&quot;SF Mono&quot;,Consolas,monospace" font-size="11" fill="#002FA7">5 HTTP 接口</text>
+    </g>
+    <!-- box4 EDA 扩展 -->
+    <g>
+      <rect x="724" y="200" width="168" height="110" fill="#FFFFFF" stroke="#E7E4DB"/>
+      <text x="808" y="240" text-anchor="middle" font-size="19" fill="#1A1A1A">EDA 扩展</text>
+      <text x="808" y="264" text-anchor="middle" font-size="13" fill="#6F6C64">TypeScript 插件</text>
+      <text x="808" y="292" text-anchor="middle" font-family="ui-monospace,&quot;SF Mono&quot;,Consolas,monospace" font-size="11" fill="#6F6C64">Pro API</text>
+    </g>
+    <!-- box5 嘉立创 EDA -->
+    <g>
+      <rect x="932" y="200" width="168" height="110" fill="#FFFFFF" stroke="#E7E4DB"/>
+      <text x="1016" y="240" text-anchor="middle" font-size="19" fill="#1A1A1A">嘉立创 EDA 专业版</text>
+      <text x="1016" y="264" text-anchor="middle" font-size="13" fill="#6F6C64">原理图 · 图元</text>
+      <text x="1016" y="292" text-anchor="middle" font-family="ui-monospace,&quot;SF Mono&quot;,Consolas,monospace" font-size="10" fill="#6F6C64">sch_PrimitiveComponent</text>
+    </g>
+  </g>
+
+  <!-- 节点间箭头 -->
+  <g stroke="#1A1A1A" stroke-width="1.2" fill="none">
+    <line x1="268" y1="255" x2="304" y2="255" marker-end="url(#eabArr)"/>
+    <line x1="476" y1="255" x2="512" y2="255" marker-end="url(#eabArr)"/>
+    <line x1="684" y1="255" x2="720" y2="255" marker-end="url(#eabArr)"/>
+    <line x1="892" y1="255" x2="928" y2="255" marker-end="url(#eabArr)"/>
+  </g>
+  <g font-family="ui-monospace,&quot;SF Mono&quot;,Consolas,monospace" font-size="11" text-anchor="middle" fill="#6F6C64">
+    <text x="286" y="188">stdio 调用</text>
+    <text x="494" y="188">HTTP / WebSocket</text>
+    <text x="702" y="188">指令 · 读图</text>
+    <text x="910" y="188">Pro API 读写</text>
+  </g>
+
+  <!-- 三层括注 -->
+  <g stroke="#6F6C64" stroke-width="1" fill="none">
+    <path d="M100,330 L100,336 L268,336 L268,330"/>
+    <path d="M308,330 L308,336 L684,336 L684,330"/>
+    <path d="M724,330 L724,336 L1100,336 L1100,330"/>
+  </g>
+  <g font-family="ui-monospace,&quot;SF Mono&quot;,Consolas,monospace" font-size="12" fill="#002FA7">
+    <text x="100" y="362">01 AGENT 层 · 外部 Agent + 配套 Skill</text>
+    <text x="308" y="362">02 桥接层 · MCP ↔ 网关</text>
+    <text x="724" y="362">03 EDA 层 · 扩展 ↔ 嘉立创 EDA</text>
+  </g>
+
+  <!-- 能力 / 调度 / 工程三列 -->
+  <g>
+    <!-- 列一:工具与接口 -->
+    <g>
+      <rect x="80" y="404" width="360" height="150" fill="#FFFFFF" stroke="#E7E4DB"/>
+      <text x="98" y="432" font-size="15" fill="#002FA7">工具与接口</text>
+      <text x="98" y="458" font-family="ui-monospace,&quot;SF Mono&quot;,Consolas,monospace" font-size="11" fill="#6F6C64">4 MCP 工具 · 5 HTTP 接口</text>
+      <text x="98" y="482" font-size="12" fill="#1A1A1A">读取选中图元 · 检查重复位号</text>
+      <text x="98" y="504" font-size="12" fill="#1A1A1A">自动选中重复器件 · 一键修复</text>
+      <text x="98" y="526" font-size="12" fill="#1A1A1A">健康检查</text>
+    </g>
+    <!-- 列二:调度设计 -->
+    <g>
+      <rect x="480" y="404" width="280" height="150" fill="#FFFFFF" stroke="#E7E4DB"/>
+      <text x="498" y="432" font-size="15" fill="#002FA7">调度设计</text>
+      <text x="498" y="458" font-size="12" fill="#1A1A1A">请求以唯一 ID 关联响应</text>
+      <text x="498" y="482" font-size="12" fill="#1A1A1A">读操作并行 / 写操作串行</text>
+      <text x="498" y="510" font-family="ui-monospace,&quot;SF Mono&quot;,Consolas,monospace" font-size="11" fill="#6F6C64">工具调用编排调度</text>
+    </g>
+    <!-- 列三:工程问题 -->
+    <g>
+      <rect x="800" y="404" width="320" height="150" fill="#FFFFFF" stroke="#E7E4DB"/>
+      <text x="818" y="432" font-size="15" fill="#002FA7">工程问题</text>
+      <text x="818" y="458" font-size="12" fill="#1A1A1A">EDA WebSocket 仅作客户端</text>
+      <text x="818" y="480" font-size="12" fill="#1A1A1A">扩展启动时序 · 同 UUID 覆盖</text>
+      <text x="818" y="502" font-size="12" fill="#1A1A1A">.edaignore 打包</text>
+    </g>
+  </g>
+
+  <!-- 成果条 -->
+  <g>
+    <rect x="80" y="578" width="1040" height="86" fill="#FFFFFF" stroke="#E7E4DB"/>
+    <rect x="80" y="578" width="4" height="86" fill="#002FA7"/>
+    <text x="104" y="614" font-size="15" fill="#002FA7">成果</text>
+    <text x="104" y="640" font-size="13" fill="#1A1A1A">对 48 个元件的原理图,Agent 可自然语言定位并修复重复位号,形成可现场演示的完整案例。</text>
+  </g>
+
+  <!-- 页脚口径 -->
+  <text x="80" y="698" font-family="ui-monospace,&quot;SF Mono&quot;,Consolas,monospace" font-size="11" fill="#6F6C64">真实可画的结构示意 · 数字口径按简历确认(4 MCP 工具 / 5 HTTP 接口)· 非截图</text>
+</svg>

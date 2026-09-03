@@ -1,0 +1,148 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" role="img" aria-labelledby="wp-title wp-desc" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif">
+  <title id="wp-title">wei+ 嵌入式信号串口助手 · 四接口与协议流程图</title>
+  <desc id="wp-desc">wei+ 串口助手同时提供 GUI / CLI / MCP / HTTP 四种访问方式,经核心引擎打通物理串口设备与 AI Agent;并展示 RawData / FireWater / JustFloat 三种协议的数据流程。</desc>
+
+  <defs>
+    <marker id="wpArr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#1A1A1A"/>
+    </marker>
+    <marker id="wpArrAcc" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#002FA7"/>
+    </marker>
+  </defs>
+
+  <!-- 标题 -->
+  <g>
+    <text x="80" y="44" font-family="ui-monospace,&quot;SF Mono&quot;,Consolas,monospace" font-size="14" letter-spacing="2" fill="#002FA7">PRODUCT · 串口助手</text>
+    <text x="80" y="84" font-family="&quot;Noto Serif SC&quot;,&quot;Songti SC&quot;,&quot;SimSun&quot;,serif" font-size="34" fill="#1A1A1A">wei+ 嵌入式信号串口助手</text>
+    <text x="80" y="110" font-size="14" fill="#6F6C64">四种访问方式 · 覆盖数据采集 / 波形显示 / FFT 分析 / 历史存储</text>
+  </g>
+
+  <!-- 01 四接口 -->
+  <g>
+    <text x="80" y="150" font-family="ui-monospace,&quot;SF Mono&quot;,Consolas,monospace" font-size="14" letter-spacing="2" fill="#002FA7">01 / 四 INTERFACE</text>
+
+    <!-- 四接口盒 -->
+    <g>
+      <!-- GUI -->
+      <g>
+        <rect x="140" y="168" width="200" height="84" fill="#FFFFFF" stroke="#E7E4DB"/>
+        <text x="240" y="200" text-anchor="middle" font-size="17" fill="#1A1A1A">GUI</text>
+        <text x="240" y="224" text-anchor="middle" font-size="12" fill="#6F6C64">桌面客户端</text>
+      </g>
+      <!-- CLI -->
+      <g>
+        <rect x="380" y="168" width="200" height="84" fill="#FFFFFF" stroke="#E7E4DB"/>
+        <text x="480" y="200" text-anchor="middle" font-size="17" fill="#1A1A1A">CLI</text>
+        <text x="480" y="224" text-anchor="middle" font-size="12" fill="#6F6C64">命令行</text>
+      </g>
+      <!-- MCP -->
+      <g>
+        <rect x="620" y="168" width="200" height="84" fill="#FFFFFF" stroke="#002FA7" stroke-width="1.5"/>
+        <text x="720" y="200" text-anchor="middle" font-size="17" fill="#002FA7">MCP Server</text>
+        <text x="720" y="224" text-anchor="middle" font-size="12" fill="#6F6C64">AI Agent 接口</text>
+      </g>
+      <!-- HTTP -->
+      <g>
+        <rect x="860" y="168" width="200" height="84" fill="#FFFFFF" stroke="#E7E4DB"/>
+        <text x="960" y="200" text-anchor="middle" font-size="17" fill="#1A1A1A">HTTP API</text>
+        <text x="960" y="224" text-anchor="middle" font-size="12" fill="#6F6C64">本地接口</text>
+      </g>
+    </g>
+
+    <!-- 汇聚总线 -->
+    <g stroke="#1A1A1A" stroke-width="1.1" fill="none">
+      <line x1="240" y1="252" x2="240" y2="276"/>
+      <line x1="480" y1="252" x2="480" y2="276"/>
+      <line x1="720" y1="252" x2="720" y2="276"/>
+      <line x1="960" y1="252" x2="960" y2="276"/>
+      <line x1="240" y1="276" x2="960" y2="276"/>
+      <line x1="600" y1="276" x2="600" y2="296" marker-end="url(#wpArrAcc)"/>
+    </g>
+    <g fill="#002FA7">
+      <circle cx="240" cy="276" r="3"/><circle cx="480" cy="276" r="3"/>
+      <circle cx="720" cy="276" r="3"/><circle cx="960" cy="276" r="3"/>
+      <circle cx="600" cy="276" r="3"/>
+    </g>
+
+    <!-- 核心引擎 -->
+    <g>
+      <rect x="320" y="296" width="560" height="100" fill="#FFFFFF" stroke="#002FA7" stroke-width="1.5"/>
+      <text x="600" y="338" text-anchor="middle" font-size="22" fill="#002FA7">wei+ 核心引擎</text>
+      <text x="600" y="366" text-anchor="middle" font-size="13" fill="#6F6C64">串口收发 · 协议解析 · 信号分析 · 历史存储</text>
+    </g>
+
+    <!-- 核心 → 设备 -->
+    <g stroke="#1A1A1A" stroke-width="1.1" fill="none">
+      <line x1="600" y1="396" x2="600" y2="424" marker-end="url(#wpArr)"/>
+    </g>
+
+    <!-- 物理串口设备 -->
+    <g>
+      <rect x="400" y="428" width="400" height="60" fill="#FFFFFF" stroke="#E7E4DB"/>
+      <text x="600" y="456" text-anchor="middle" font-size="16" fill="#1A1A1A">物理串口设备</text>
+      <text x="600" y="476" text-anchor="middle" font-size="12" fill="#6F6C64">USB / COM · 嵌入式信号</text>
+    </g>
+
+    <!-- MCP 工具 / Agent 注释 -->
+    <g>
+      <text x="80" y="516" font-size="13" fill="#1A1A1A">MCP 工具:</text>
+      <text x="160" y="516" font-family="ui-monospace,&quot;SF Mono&quot;,Consolas,monospace" font-size="12" fill="#6F6C64">wei_list_ports · wei_get_status · wei_read_since · wei_send_command · wei_clear_data</text>
+      <text x="80" y="540" font-size="13" fill="#1A1A1A">Agent:Codex / DSH / Claude 可直接读取并控制串口设备 · 打通「物理设备 ↔ AI Agent」链路</text>
+    </g>
+  </g>
+
+  <!-- 分隔线 -->
+  <line x1="80" y1="566" x2="1120" y2="566" stroke="#E7E4DB"/>
+
+  <!-- 02 协议流程 -->
+  <g>
+    <text x="80" y="606" font-family="ui-monospace,&quot;SF Mono&quot;,Consolas,monospace" font-size="14" letter-spacing="2" fill="#002FA7">02 / 协议 FLOW</text>
+
+    <!-- 流程四盒 -->
+    <g>
+      <!-- 串口字节流 -->
+      <g>
+        <rect x="90" y="628" width="230" height="112" fill="#FFFFFF" stroke="#E7E4DB"/>
+        <text x="205" y="662" text-anchor="middle" font-size="16" fill="#1A1A1A">串口字节流</text>
+        <text x="205" y="686" text-anchor="middle" font-size="12" fill="#6F6C64">来自物理设备的原始字节</text>
+        <text x="205" y="716" text-anchor="middle" font-family="ui-monospace,&quot;SF Mono&quot;,Consolas,monospace" font-size="11" fill="#6F6C64">in_buffer</text>
+      </g>
+      <!-- 协议解析 -->
+      <g>
+        <rect x="356" y="628" width="230" height="112" fill="#FFFFFF" stroke="#002FA7" stroke-width="1.5"/>
+        <text x="471" y="658" text-anchor="middle" font-size="16" fill="#002FA7">协议解析</text>
+        <text x="471" y="682" text-anchor="middle" font-family="ui-monospace,&quot;SF Mono&quot;,Consolas,monospace" font-size="11" fill="#1A1A1A">RawData · FireWater(CSV)</text>
+        <text x="471" y="703" text-anchor="middle" font-family="ui-monospace,&quot;SF Mono&quot;,Consolas,monospace" font-size="11" fill="#1A1A1A">JustFloat(float32)</text>
+        <text x="471" y="726" text-anchor="middle" font-size="12" fill="#6F6C64">按帧三选一解析</text>
+      </g>
+      <!-- 时序读取 -->
+      <g>
+        <rect x="622" y="628" width="230" height="112" fill="#FFFFFF" stroke="#E7E4DB"/>
+        <text x="737" y="662" text-anchor="middle" font-size="16" fill="#1A1A1A">时序读取</text>
+        <text x="737" y="688" text-anchor="middle" font-size="12" fill="#6F6C64">时间戳增量读取</text>
+        <text x="737" y="710" text-anchor="middle" font-size="12" fill="#6F6C64">有界查询</text>
+      </g>
+      <!-- 信号分析 -->
+      <g>
+        <rect x="888" y="628" width="230" height="112" fill="#FFFFFF" stroke="#E7E4DB"/>
+        <text x="1003" y="662" text-anchor="middle" font-size="16" fill="#1A1A1A">信号分析</text>
+        <text x="1003" y="688" text-anchor="middle" font-size="12" fill="#6F6C64">波形显示 · FFT 频谱</text>
+        <text x="1003" y="710" text-anchor="middle" font-size="12" fill="#6F6C64">历史存储</text>
+      </g>
+    </g>
+
+    <!-- 流程箭头 -->
+    <g stroke="#1A1A1A" stroke-width="1.1" fill="none">
+      <line x1="320" y1="684" x2="352" y2="684" marker-end="url(#wpArr)"/>
+      <line x1="586" y1="684" x2="618" y2="684" marker-end="url(#wpArr)"/>
+      <line x1="852" y1="684" x2="884" y2="684" marker-end="url(#wpArr)"/>
+    </g>
+  </g>
+
+  <!-- 页脚 -->
+  <g>
+    <text x="80" y="782" font-size="13" fill="#1A1A1A">PyInstaller 打包分发 · 内置数据库与信号分析功能 · 覆盖数据采集 / 波形显示 / FFT 分析 / 历史存储</text>
+    <text x="80" y="806" font-family="ui-monospace,&quot;SF Mono&quot;,Consolas,monospace" font-size="11" fill="#6F6C64">真实可画的协议与接口示意 · 依据站主确认口径 · 非截图</text>
+  </g>
+</svg>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>管理端 · 陆耀威个人站</title>
+<link rel="stylesheet" href="/assets/admin.css">
+</head>
+<body>
+
+<!-- 认证层：首次设置密码 / 登录（由脚本按 /api/auth/state 切换） -->
+<div id="auth-view" hidden>
+  <div class="auth-box">
+    <p class="auth-kicker">LU YAOWEI · ADMIN</p>
+    <h1 class="auth-title" id="auth-title">登录管理端</h1>
+
+    <form id="setup-form" hidden>
+      <div class="field">
+        <label class="label" for="setup-pass">设置管理密码（至少 6 位）</label>
+        <input type="password" id="setup-pass" required minlength="6" autocomplete="new-password">
+      </div>
+      <div class="field">
+        <label class="label" for="setup-pass2">确认密码</label>
+        <input type="password" id="setup-pass2" required autocomplete="new-password">
+      </div>
+      <p class="form-error" id="setup-error" hidden></p>
+      <div class="form-foot">
+        <button type="submit" class="btn btn-solid" id="setup-btn">创建并进入</button>
+        <span class="saved-flag" id="setup-saved" hidden>已保存</span>
+      </div>
+    </form>
+
+    <form id="login-form" hidden>
+      <div class="field">
+        <label class="label" for="login-pass">管理密码</label>
+        <input type="password" id="login-pass" required autocomplete="current-password">
+      </div>
+      <p class="form-error" id="login-error" hidden></p>
+      <div class="form-foot">
+        <button type="submit" class="btn btn-solid" id="login-btn">登录</button>
+      </div>
+    </form>
+
+    <p class="auth-note" id="auth-note" hidden></p>
+  </div>
+</div>
+
+<!-- 管理主界面 -->
+<div id="admin-view" hidden>
+  <div class="shell">
+    <aside class="side">
+      <div class="side-brand">
+        <span class="side-name">陆耀威</span>
+        <span class="side-en">ADMIN</span>
+      </div>
+      <nav class="side-nav" id="side-nav" aria-label="管理导航"></nav>
+      <div class="side-foot">
+        <a class="side-link" href="/" target="_blank" rel="noopener">查看站点</a>
+        <button type="button" class="side-link" id="logout-btn">退出登录</button>
+      </div>
+    </aside>
+    <main class="main">
+      <div class="main-inner" id="panel"></div>
+    </main>
+  </div>
+</div>
+
+<script src="/assets/admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: luyaowei-personal-site
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/auth/state
+    envVars:
+      - key: NODE_VERSION
+        value: 22.13.0
+      - key: AGENT_API_KEY
+        sync: false
+        secret: true
