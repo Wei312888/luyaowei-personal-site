@@ -1,117 +1,89 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 620" role="img" aria-labelledby="smd-title smd-desc" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif">
-  <title id="smd-title">周期信号测量分析装置 · 系统框图</title>
-  <desc id="smd-desc">简易示波器:从待测信号经前端调理、AD9226 采集、TIM2/DMA 采样控制到 FIR 滤波与 FFT 分析,最终获得测量指标并显示;含干扰监测增益校正与 GPIO 调试工具。</desc>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" role="img" aria-labelledby="signal-measurement-device-title signal-measurement-device-desc" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif">
+  <title id="signal-measurement-device-title">周期信号测量分析装置 · 思维导图</title>
+  <desc id="signal-measurement-device-desc">周期信号测量分析装置:以根节点与 7 个一级分支(定位/链路/算法/指标/难点/测试实测/复盘)呈现项目全貌,内容按站点口径蒸馏。</desc>
 
-  <defs>
-    <marker id="smdArr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-      <path d="M0,0 L10,5 L0,10 z" fill="#1A1A1A"/>
-    </marker>
-    <marker id="smdArrAcc" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-      <path d="M0,0 L10,5 L0,10 z" fill="#002FA7"/>
-    </marker>
-  </defs>
-
-  <!-- 标题 -->
+  <!-- 版头 -->
   <g>
-    <text x="80" y="44" font-family="ui-monospace,&quot;SF Mono&quot;,Consolas,monospace" font-size="14" letter-spacing="2" fill="#002FA7">BLOCK DIAGRAM · 信号测量</text>
-    <text x="80" y="84" font-family="&quot;Noto Serif SC&quot;,&quot;Songti SC&quot;,&quot;SimSun&quot;,serif" font-size="32" fill="#1A1A1A">周期信号测量分析装置</text>
-    <text x="80" y="110" font-size="14" fill="#6F6C64">STM32H743 + AD9226 · 采集 → 滤波 → FFT → 测量 · 按键后 1 秒内显示</text>
+    <text x="40" y="46" font-family="ui-monospace,&quot;SF Mono&quot;,Consolas,monospace" font-size="14" letter-spacing="2" fill="#002FA7">MIND MAP · 周期信号测量 · 2026 电赛区赛 G 题</text>
+    <text x="40" y="92" font-family="&quot;Noto Serif SC&quot;,&quot;Songti SC&quot;,&quot;SimSun&quot;,serif" font-size="34" fill="#1A1A1A">周期信号测量分析装置</text>
+    <text x="40" y="120" font-size="13.5" fill="#6F6C64">STM32H743 + AD9226 · 采集 → FIR → FFT → 测量 · 误差 ≤5 mV / 基频 ≤1 kHz / 2 s 显示</text>
+    <line x1="40" y1="140" x2="1160" y2="140" stroke="#E7E4DB" stroke-width="1"/>
   </g>
 
-  <!-- 信号链(6 节点) -->
-  <g>
-    <!-- 1 待测信号 -->
+      <!-- 根 → 分支 连接线 -->
+      <polyline points="280,380 318,380 318,224 340,224" fill="none" stroke="#1A1A1A" stroke-width="1"/>
+      <polyline points="280,380 768,380 768,315 790,315" fill="none" stroke="#1A1A1A" stroke-width="1"/>
+      <polyline points="280,380 318,380 318,406 340,406" fill="none" stroke="#1A1A1A" stroke-width="1"/>
+      <polyline points="280,380 768,380 768,497 790,497" fill="none" stroke="#1A1A1A" stroke-width="1"/>
+      <polyline points="280,380 318,380 318,588 340,588" fill="none" stroke="#1A1A1A" stroke-width="1"/>
+      <polyline points="280,380 768,380 768,679 790,679" fill="none" stroke="#1A1A1A" stroke-width="1"/>
+      <polyline points="280,380 318,380 318,770 340,770" fill="none" stroke="#1A1A1A" stroke-width="1"/>
+    <!-- 根节点 -->
     <g>
-      <rect x="86" y="150" width="148" height="120" fill="#FFFFFF" stroke="#E7E4DB"/>
-      <text x="160" y="192" text-anchor="middle" font-size="16" fill="#1A1A1A">待测信号</text>
-      <text x="160" y="216" text-anchor="middle" font-size="12" fill="#6F6C64">周期信号输入</text>
-      <text x="160" y="240" text-anchor="middle" font-size="12" fill="#6F6C64">正弦 / 三角 / 方波</text>
+      <rect x="36" y="305" width="244" height="150" fill="#FFFFFF" stroke="#002FA7" stroke-width="1.5"/>
+      <text x="52" y="331" font-family="ui-monospace,&quot;SF Mono&quot;,Consolas,monospace" font-size="10.5" letter-spacing="2" fill="#002FA7">PROJECT MIND MAP</text>
+      <text x="52" y="361" font-family="&quot;Noto Serif SC&quot;,&quot;Songti SC&quot;,&quot;SimSun&quot;,serif" font-size="19" fill="#1A1A1A">周期信号测量</text>
+      <text x="52" y="387" font-family="&quot;Noto Serif SC&quot;,&quot;Songti SC&quot;,&quot;SimSun&quot;,serif" font-size="19" fill="#1A1A1A">分析装置</text>
     </g>
-    <!-- 2 前端调理 -->
     <g>
-      <rect x="262" y="150" width="148" height="120" fill="#FFFFFF" stroke="#E7E4DB"/>
-      <text x="336" y="190" text-anchor="middle" font-size="16" fill="#1A1A1A">前端调理</text>
-      <text x="336" y="214" text-anchor="middle" font-size="12" fill="#6F6C64">50Ω 阻抗匹配</text>
-      <text x="336" y="236" text-anchor="middle" font-size="12" fill="#6F6C64">前端增益标定</text>
+      <rect x="340" y="140" width="400" height="168" fill="#FFFFFF" stroke="#E7E4DB"/>
+      <text x="356" y="166" font-family="ui-monospace,&quot;SF Mono&quot;,Consolas,monospace" font-size="11" letter-spacing="2" fill="#002FA7">01 / 定位</text>
+      <text x="356" y="192" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">10–500 kHz、50–250 mVpp 基波+1~2 次谐波测量；</text>
+      <text x="356" y="210" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">抑制 ≥1 MHz 单频干扰；单路 5 V 供电；</text>
+      <text x="356" y="228" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">按键 2 秒内显示全部数据</text>
+      <text x="356" y="246" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">(2026 电赛区赛 G 题 · 独立完成)</text>
     </g>
-    <!-- 3 AD9226 -->
     <g>
-      <rect x="438" y="150" width="148" height="120" fill="#FFFFFF" stroke="#E7E4DB"/>
-      <text x="512" y="190" text-anchor="middle" font-size="16" fill="#1A1A1A">AD9226 ADC</text>
-      <text x="512" y="214" text-anchor="middle" font-size="12" fill="#6F6C64">12 位并行采集</text>
-      <text x="512" y="236" text-anchor="middle" font-size="12" fill="#6F6C64">数据线重映射</text>
+      <rect x="790" y="231" width="400" height="168" fill="#FFFFFF" stroke="#E7E4DB"/>
+      <text x="806" y="257" font-family="ui-monospace,&quot;SF Mono&quot;,Consolas,monospace" font-size="11" letter-spacing="2" fill="#002FA7">02 / 系统链路</text>
+      <text x="806" y="283" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">加法器 50Ω 匹配 + 电压跟随器 →</text>
+      <text x="806" y="301" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">AD9226(12bit/8MSPS) → TIM2 触发 DMA</text>
+      <text x="806" y="319" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">GPIO 并行采样 16512 点 →</text>
+      <text x="806" y="337" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">96 阶 Kaiser FIR + 4 倍抽取 →</text>
+      <text x="806" y="355" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">时域测量 + 4096 点 FFT(Hann) →</text>
+      <text x="806" y="373" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">串口屏波形与线谱</text>
     </g>
-    <!-- 4 采样控制 -->
     <g>
-      <rect x="614" y="150" width="148" height="120" fill="#FFFFFF" stroke="#E7E4DB"/>
-      <text x="688" y="190" text-anchor="middle" font-size="16" fill="#1A1A1A">采样控制</text>
-      <text x="688" y="214" text-anchor="middle" font-size="12" fill="#6F6C64">TIM2 输出 8MHz</text>
-      <text x="688" y="236" text-anchor="middle" font-size="12" fill="#6F6C64">DMA 并行采样</text>
+      <rect x="340" y="322" width="400" height="168" fill="#FFFFFF" stroke="#E7E4DB"/>
+      <text x="356" y="348" font-family="ui-monospace,&quot;SF Mono&quot;,Consolas,monospace" font-size="11" letter-spacing="2" fill="#002FA7">03 / 核心算法与理论</text>
+      <text x="356" y="374" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">FFT 谱峰 + 抛物线/任意频率窗 DFT 细化</text>
+      <text x="356" y="392" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">幅值相位；时域 Vpp 与频域重构交叉校验；</text>
+      <text x="356" y="410" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">Goertzel 定点监测 1/2 MHz 滤波前后残余；</text>
+      <text x="356" y="428" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">350–500 kHz 手动高频增益校正；</text>
+      <text x="356" y="446" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">低幅值波形 FFT 重建 + Catmull-Rom 平滑</text>
     </g>
-    <!-- 5 数字信号处理 -->
     <g>
-      <rect x="790" y="150" width="148" height="120" fill="#FFFFFF" stroke="#002FA7" stroke-width="1.5"/>
-      <text x="864" y="186" text-anchor="middle" font-size="16" fill="#002FA7">数字信号处理</text>
-      <text x="864" y="208" text-anchor="middle" font-size="11" fill="#6F6C64">96 阶 Kaiser FIR 抗混叠</text>
-      <text x="864" y="228" text-anchor="middle" font-size="11" fill="#6F6C64">4 倍抽取 · Hann 窗 FFT</text>
-      <text x="864" y="248" text-anchor="middle" font-size="11" fill="#6F6C64">频率分辨率 488Hz</text>
+      <rect x="790" y="413" width="400" height="168" fill="#FFFFFF" stroke="#E7E4DB"/>
+      <text x="806" y="439" font-family="ui-monospace,&quot;SF Mono&quot;,Consolas,monospace" font-size="11" letter-spacing="2" fill="#002FA7">04 / 关键指标</text>
+      <text x="806" y="465" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">幅值误差 ≤5 mV · 基频误差 ≤1 kHz</text>
+      <text x="806" y="483" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">· 分辨率 488 Hz · 2 s 内显示；</text>
+      <text x="806" y="501" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">500 kHz/250 mVpp 关键点误差约 2 mV；</text>
+      <text x="806" y="519" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">≥1 MHz 干扰下 FIR 衰减 ≈44 dB 仍达标</text>
     </g>
-    <!-- 6 测量与显示 -->
     <g>
-      <rect x="966" y="150" width="148" height="120" fill="#FFFFFF" stroke="#E7E4DB"/>
-      <text x="1040" y="190" text-anchor="middle" font-size="16" fill="#1A1A1A">测量与显示</text>
-      <text x="1040" y="214" text-anchor="middle" font-size="11" fill="#6F6C64">Vpp / 真有效值 / 基频</text>
-      <text x="1040" y="234" text-anchor="middle" font-size="11" fill="#6F6C64">识别基波与 2–5 次谐波</text>
-      <text x="1040" y="254" text-anchor="middle" font-size="11" fill="#6F6C64">串口屏 1 秒内显示</text>
+      <rect x="340" y="504" width="400" height="168" fill="#FFFFFF" stroke="#E7E4DB"/>
+      <text x="356" y="530" font-family="ui-monospace,&quot;SF Mono&quot;,Consolas,monospace" font-size="11" letter-spacing="2" fill="#002FA7">05 / 关键难点</text>
+      <text x="356" y="556" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">并行位线虚焊/错线 → GPIO 扫描重映射；</text>
+      <text x="356" y="574" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">谐波“测不到”属频带设计(&gt;500 kHz 不在题内)；</text>
+      <text x="356" y="592" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">低幅值量化台阶 → FFT 重建平滑显示；</text>
+      <text x="356" y="610" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">自动干扰校正误触发 → 手动 HF CORR</text>
     </g>
-  </g>
-
-  <!-- 信号链箭头 -->
-  <g stroke="#1A1A1A" stroke-width="1.1" fill="none">
-    <line x1="234" y1="210" x2="258" y2="210" marker-end="url(#smdArr)"/>
-    <line x1="410" y1="210" x2="434" y2="210" marker-end="url(#smdArr)"/>
-    <line x1="586" y1="210" x2="610" y2="210" marker-end="url(#smdArr)"/>
-    <line x1="762" y1="210" x2="786" y2="210" marker-end="url(#smdArr)"/>
-    <line x1="938" y1="210" x2="962" y2="210" marker-end="url(#smdArr)"/>
-  </g>
-
-  <!-- 干扰监测 → 高频增益校正 反馈 -->
-  <g stroke="#002FA7" stroke-width="1.1" fill="none">
-    <polyline points="864,270 864,310 336,310 336,274" marker-end="url(#smdArrAcc)"/>
-  </g>
-  <text x="360" y="304" font-size="13" fill="#002FA7">实时监测干扰 → 启用高频增益校正</text>
-
-  <!-- 指标三列 -->
-  <g>
-    <!-- 测量指标 -->
     <g>
-      <rect x="80" y="356" width="360" height="150" fill="#FFFFFF" stroke="#E7E4DB"/>
-      <text x="98" y="384" font-size="15" fill="#002FA7">测量指标</text>
-      <text x="98" y="410" font-size="12" fill="#1A1A1A">Vpp / 真有效值 / 基频 / 谐波幅值</text>
-      <text x="98" y="434" font-size="12" fill="#1A1A1A">误差 ≤ 1mV · 基频误差 ≤ 0.5kHz</text>
-      <text x="98" y="458" font-size="12" fill="#1A1A1A">频率分辨率 488Hz</text>
-      <text x="98" y="482" font-size="12" fill="#1A1A1A">按键后 1 秒内显示</text>
+      <rect x="790" y="595" width="400" height="168" fill="#FFFFFF" stroke="#E7E4DB"/>
+      <text x="806" y="621" font-family="ui-monospace,&quot;SF Mono&quot;,Consolas,monospace" font-size="11" letter-spacing="2" fill="#002FA7">06 / 测试与实测</text>
+      <text x="806" y="647" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">9 组纯正弦 Vpp/Vrms 全达标；</text>
+      <text x="806" y="665" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">基波+谐波定量分量误差 ≤5 mV；</text>
+      <text x="806" y="683" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">1/2 MHz 干扰 FIR 后衰减约 44 dB；</text>
+      <text x="806" y="701" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">整机闭环与示波器对照一致</text>
     </g>
-    <!-- 关键点实测 -->
     <g>
-      <rect x="480" y="356" width="280" height="150" fill="#FFFFFF" stroke="#E7E4DB"/>
-      <text x="498" y="384" font-size="15" fill="#002FA7">关键点实测</text>
-      <text x="498" y="410" font-size="12" fill="#1A1A1A">500kHz / 250mVpp</text>
-      <text x="498" y="432" font-size="12" fill="#1A1A1A">误差约 1mV</text>
-      <text x="498" y="458" font-size="12" fill="#1A1A1A">可采集三角波 / 方波</text>
-      <text x="498" y="480" font-size="12" fill="#1A1A1A">滤出 600kHz 干扰杂波</text>
+      <rect x="340" y="686" width="400" height="168" fill="#FFFFFF" stroke="#E7E4DB"/>
+      <text x="356" y="712" font-family="ui-monospace,&quot;SF Mono&quot;,Consolas,monospace" font-size="11" letter-spacing="2" fill="#002FA7">07 / 复盘与收获</text>
+      <text x="356" y="738" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">独立走通「并行 ADC+DMA → 多速率滤波 →</text>
+      <text x="356" y="756" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">FFT 工程细化 → 整机标定 → 串口屏联调」</text>
+      <text x="356" y="774" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">完整测量链路；保留 VOFA+ 与 GPIO 诊断</text>
+      <text x="356" y="792" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">能力，收获小信号整机标定方法</text>
     </g>
-    <!-- 硬件与调试 -->
-    <g>
-      <rect x="800" y="356" width="320" height="150" fill="#FFFFFF" stroke="#E7E4DB"/>
-      <text x="818" y="384" font-size="15" fill="#002FA7">硬件与调试</text>
-      <text x="818" y="410" font-size="12" fill="#1A1A1A">50Ω 阻抗匹配 · 增益标定</text>
-      <text x="818" y="432" font-size="12" fill="#1A1A1A">12 位并行数据线重映射</text>
-      <text x="818" y="458" font-size="12" fill="#1A1A1A">GPIO 扫描工具</text>
-      <text x="818" y="480" font-size="12" fill="#6F6C64">定位虚焊 / 错线</text>
-    </g>
-  </g>
-
   <!-- 页脚 -->
-  <text x="80" y="540" font-family="ui-monospace,&quot;SF Mono&quot;,Consolas,monospace" font-size="11" fill="#6F6C64">真实可画的系统框图 · 依据站主确认口径 · 非截图</text>
+  <text x="40" y="876" font-family="ui-monospace,&quot;SF Mono&quot;,Consolas,monospace" font-size="11" fill="#6F6C64">依据站点/简历口径 · 完整技术报告:周期信号测量分析装置技术报告.md(2026.07)</text>
 </svg>

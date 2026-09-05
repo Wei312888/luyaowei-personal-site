@@ -5,3 +5,4 @@ data/
 SITE-UPGRADE-STATUS.md
 .agent-teams/
 .wrangler/
+.qa/

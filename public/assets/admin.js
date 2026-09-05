@@ -568,7 +568,11 @@
           '<img class="img-preview" alt="配图预览" data-img-preview>' +
           '<p class="img-url" data-img-url></p>' +
         '</div>' +
-        '<p class="hint" data-img-hint>尚未上传配图，选择文件即上传到服务器，保存时随条目一起写入。</p>' +
+        '<div class="field img-url-field">' +
+          '<label class="label" for="img-url-input">图片 URL（直接填外链或 /uploads/ 路径；留空则用左侧上传）</label>' +
+          '<input type="text" id="img-url-input" data-img-url-input value="' + esc(url) + '" placeholder="https://… 或 /uploads/xxx.png">' +
+        '</div>' +
+        '<p class="hint" data-img-hint>上传配图：选择文件即上传到服务器，保存时随条目一起写入；也可直接粘贴图片 URL。</p>' +
         '<div class="img-controls">' +
           '<label class="btn img-pick"><span data-img-pick-text>选择图片</span>' +
             '<input type="file" accept="image/png,image/jpeg,image/webp,image/gif" data-img-file hidden></label>' +
@@ -587,6 +591,7 @@
     var g = form.querySelector('[data-img-group]');
     if (!g) return;
     var hidden = g.querySelector('[data-img-hidden]');
+    var urlInput = g.querySelector('[data-img-url-input]');
     var fileInput = g.querySelector('[data-img-file]');
     var wrap = g.querySelector('.img-preview-wrap');
     var preview = g.querySelector('[data-img-preview]');
@@ -604,6 +609,8 @@
       hint.hidden = has;
       removeBtn.hidden = !has;
       pickText.textContent = has ? '重新选择' : '选择图片';
+      // URL 输入框与 hidden 同步（仅当输入框未聚焦时回写，避免打字被覆盖）
+      if (document.activeElement !== urlInput && urlInput.value !== url) urlInput.value = url;
       if (has) {
         preview.src = url;
         urlEl.textContent = url;
@@ -612,6 +619,12 @@
         urlEl.textContent = '';
       }
     }
+
+    // 直接输入图片 URL：即时生效并预览
+    urlInput.addEventListener('input', function () {
+      hidden.value = urlInput.value.trim();
+      render();
+    });
 
     function showErr(msg) {
       err.textContent = msg;

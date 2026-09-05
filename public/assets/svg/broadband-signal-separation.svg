@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" role="img" aria-labelledby="broadband-signal-separation-title broadband-signal-separation-desc" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif">
+  <title id="broadband-signal-separation-title">宽带混合信号分离与锁相重建系统 · 思维导图</title>
+  <desc id="broadband-signal-separation-desc">宽带混合信号分离与锁相重建系统:以根节点与 7 个一级分支(定位/链路/算法/指标/难点/测试实测/复盘)呈现项目全貌,内容按站点口径蒸馏。</desc>
+
+  <!-- 版头 -->
+  <g>
+    <text x="40" y="46" font-family="ui-monospace,&quot;SF Mono&quot;,Consolas,monospace" font-size="14" letter-spacing="2" fill="#002FA7">MIND MAP · 宽带信号分离 · 电赛 H 题(2023 赛题)</text>
+    <text x="40" y="92" font-family="&quot;Noto Serif SC&quot;,&quot;Songti SC&quot;,&quot;SimSun&quot;,serif" font-size="34" fill="#1A1A1A">宽带混合信号分离与锁相重建系统</text>
+    <text x="40" y="120" font-size="13.5" fill="#6F6C64">STM32F407 + FFT + AD9833 DDS · 1.024 MHz 采样 · 输出 ≥2 V · 1 s 全流程</text>
+    <line x1="40" y1="140" x2="1160" y2="140" stroke="#E7E4DB" stroke-width="1"/>
+  </g>
+
+      <!-- 根 → 分支 连接线 -->
+      <polyline points="280,380 318,380 318,224 340,224" fill="none" stroke="#1A1A1A" stroke-width="1"/>
+      <polyline points="280,380 768,380 768,315 790,315" fill="none" stroke="#1A1A1A" stroke-width="1"/>
+      <polyline points="280,380 318,380 318,406 340,406" fill="none" stroke="#1A1A1A" stroke-width="1"/>
+      <polyline points="280,380 768,380 768,497 790,497" fill="none" stroke="#1A1A1A" stroke-width="1"/>
+      <polyline points="280,380 318,380 318,588 340,588" fill="none" stroke="#1A1A1A" stroke-width="1"/>
+      <polyline points="280,380 768,380 768,679 790,679" fill="none" stroke="#1A1A1A" stroke-width="1"/>
+      <polyline points="280,380 318,380 318,770 340,770" fill="none" stroke="#1A1A1A" stroke-width="1"/>
+    <!-- 根节点 -->
+    <g>
+      <rect x="36" y="305" width="244" height="150" fill="#FFFFFF" stroke="#002FA7" stroke-width="1.5"/>
+      <text x="52" y="331" font-family="ui-monospace,&quot;SF Mono&quot;,Consolas,monospace" font-size="10.5" letter-spacing="2" fill="#002FA7">PROJECT MIND MAP</text>
+      <text x="52" y="361" font-family="&quot;Noto Serif SC&quot;,&quot;Songti SC&quot;,&quot;SimSun&quot;,serif" font-size="19" fill="#1A1A1A">宽带混合信号分离</text>
+      <text x="52" y="387" font-family="&quot;Noto Serif SC&quot;,&quot;Songti SC&quot;,&quot;SimSun&quot;,serif" font-size="19" fill="#1A1A1A">与锁相重建系统</text>
+    </g>
+    <g>
+      <rect x="340" y="140" width="400" height="168" fill="#FFFFFF" stroke="#E7E4DB"/>
+      <text x="356" y="166" font-family="ui-monospace,&quot;SF Mono&quot;,Consolas,monospace" font-size="11" letter-spacing="2" fill="#002FA7">01 / 定位</text>
+      <text x="356" y="192" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">A、B 两路同频段信号相加后分离重建:</text>
+      <text x="356" y="210" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">FFT 判别正弦/三角波并由 DDS 同频重建,</text>
+      <text x="356" y="228" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">输出 A′/B′ 纯净波形、相位差可设;</text>
+      <text x="356" y="246" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">单次触发 1 秒内完成全流程</text>
+      <text x="356" y="264" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">(H 题 · 2023 赛题年份,2026.05 完成)</text>
+    </g>
+    <g>
+      <rect x="790" y="231" width="400" height="168" fill="#FFFFFF" stroke="#E7E4DB"/>
+      <text x="806" y="257" font-family="ui-monospace,&quot;SF Mono&quot;,Consolas,monospace" font-size="11" letter-spacing="2" fill="#002FA7">02 / 系统链路</text>
+      <text x="806" y="283" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">反相加法器 C=A+B + 反向跟随 →</text>
+      <text x="806" y="301" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">电压抬升 → STM32F407 ADC 采样</text>
+      <text x="806" y="319" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">(1.024 MHz/1024 点) → FFT 提基频判波形 →</text>
+      <text x="806" y="337" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">AD9833×2 DDS 重建 → 放大+交流耦合 →</text>
+      <text x="806" y="355" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">输出 A′/B′ → 抬升反馈 ADC 做 PID 锁相</text>
+    </g>
+    <g>
+      <rect x="340" y="322" width="400" height="168" fill="#FFFFFF" stroke="#E7E4DB"/>
+      <text x="356" y="348" font-family="ui-monospace,&quot;SF Mono&quot;,Consolas,monospace" font-size="11" letter-spacing="2" fill="#002FA7">03 / 核心算法与理论</text>
+      <text x="356" y="374" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">主频降 128 MHz+定时器 125 分频,采样率恰</text>
+      <text x="356" y="392" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">1.024 MHz:1024 点 FFT 分辨率 1 kHz、</text>
+      <text x="356" y="410" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">几乎无泄漏;双谱峰提取 + 谐波结构判别</text>
+      <text x="356" y="428" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">(正弦单峰/三角奇次谐波);</text>
+      <text x="356" y="446" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">自动频偏纠正 + 软件 PID 闭环锁相</text>
+    </g>
+    <g>
+      <rect x="790" y="413" width="400" height="168" fill="#FFFFFF" stroke="#E7E4DB"/>
+      <text x="806" y="439" font-family="ui-monospace,&quot;SF Mono&quot;,Consolas,monospace" font-size="11" letter-spacing="2" fill="#002FA7">04 / 关键指标</text>
+      <text x="806" y="465" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">A′/B′ 峰峰值 ≥2 V(实测 2.04–2.10 V);</text>
+      <text x="806" y="483" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">1 s 内完成全流程;题目 20–100 kHz、</text>
+      <text x="806" y="501" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">实测最低分离频率低至 5 kHz;</text>
+      <text x="806" y="519" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">正弦/三角任意组合分离;</text>
+      <text x="806" y="537" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">相位给定 50° 实测 51.84°</text>
+    </g>
+    <g>
+      <rect x="340" y="504" width="400" height="168" fill="#FFFFFF" stroke="#E7E4DB"/>
+      <text x="356" y="530" font-family="ui-monospace,&quot;SF Mono&quot;,Consolas,monospace" font-size="11" letter-spacing="2" fill="#002FA7">05 / 关键难点</text>
+      <text x="356" y="556" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">采样率与泄漏权衡 → 牺牲主频保整倍数(免窗);</text>
+      <text x="356" y="574" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">板载 DAC 70 kHz 以上三角波失真 →</text>
+      <text x="356" y="592" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">AD9833 DDS 重建;示波器漂移/频偏 →</text>
+      <text x="356" y="610" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">软件 PID 锁相反馈;同相加法器输入互扰</text>
+      <text x="356" y="628" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">→ 反相加法 + 反向跟随</text>
+    </g>
+    <g>
+      <rect x="790" y="595" width="400" height="168" fill="#FFFFFF" stroke="#E7E4DB"/>
+      <text x="806" y="621" font-family="ui-monospace,&quot;SF Mono&quot;,Consolas,monospace" font-size="11" letter-spacing="2" fill="#002FA7">06 / 测试与实测</text>
+      <text x="806" y="647" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">20–100 kHz 正弦/三角 9 组任意组合全部</text>
+      <text x="806" y="665" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">1 s 内分离,波形形状正确;</text>
+      <text x="806" y="683" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">相位差给定 50°→51.84°、80°→82.8°;</text>
+      <text x="806" y="701" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">5 kHz 展示项分离正常、长时间不漂移</text>
+    </g>
+    <g>
+      <rect x="340" y="686" width="400" height="168" fill="#FFFFFF" stroke="#E7E4DB"/>
+      <text x="356" y="712" font-family="ui-monospace,&quot;SF Mono&quot;,Consolas,monospace" font-size="11" letter-spacing="2" fill="#002FA7">07 / 复盘与收获</text>
+      <text x="356" y="738" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">“频域谐波结构识别波形”对非正弦信号比</text>
+      <text x="356" y="756" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">模拟滤波鲁棒,一次 FFT 拿到频率/类型/相位;</text>
+      <text x="356" y="774" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">免泄漏采样参数化设计省掉窗函数;</text>
+      <text x="356" y="792" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">DDS + 软件锁相重建可程序化设定相位差</text>
+    </g>
+  <!-- 页脚 -->
+  <text x="40" y="876" font-family="ui-monospace,&quot;SF Mono&quot;,Consolas,monospace" font-size="11" fill="#6F6C64">依据站点/简历口径(≥2 V / 1 s 全流程) · 技术报告:合并报告第一部分(H 题,2026.05)</text>
+</svg>

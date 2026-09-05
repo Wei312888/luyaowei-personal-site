@@ -21,7 +21,7 @@
     "education": { "school": "…", "major": "…", "period": "…", "gpa": "…", "courses": "…" },
     "skills": [{ "group": "Agent / MCP", "items": "…" }]
   },
-  "projects":  [{ "id":1, "name":"…", "tag":"独立完成", "stack":"…", "period":"…", "bullets":["…"], "link":"", "image":"", "imageWidth":100 }],
+  "projects":  [{ "id":1, "slug":"eda-agent-bridge", "name":"…", "tag":"独立完成", "stack":"…", "period":"…", "bullets":["…"], "link":"", "image":"", "imageWidth":100 }],
   "progress":  [{ "id":1, "project":"EDA Agent 桥", "status":"迭代推进中", "note":"…" }],
   "campus":    [{ "id":1, "title":"…", "org":"…", "period":"…", "detail":"…" }],
   "honors":    [{ "id":1, "name":"…", "detail":"…", "year":"2025", "image":"", "imageWidth":100 }],
@@ -36,8 +36,9 @@
 ## 项目深度文档 projectDocs（`GET /api/project/:slug`，公开）
 
 - 深度文档以 slug 为键，整体存 `kv.projectDocs_json`，seed 里为 `projectDocs` 对象。
+- 项目条目新增 `slug` 字段（详情页寻址用）：`GET /api/content` 的 `projects[]` 每项必含 slug；旧库自动迁移（按名称映射，未知名称用 `p-<id>` 兜底；Cloudflare 版运行时补全，不落库）。
 - `GET /api/project/:slug`：
-  - `:slug` ∈ `eda-agent-bridge | wei-plus`；不存在 → 404 `{"error":"项目文档不存在"}`
+  - `:slug` ∈ **全部项目 slug**（projectDocs 已收录的 `eda-agent-bridge | wei-plus`，以及其余项目 slug——如 `signal-measurement-device | wireless-transceiver | broadband-signal-separation`）；项目列表内无此 slug → 404 `{"error":"项目文档不存在"}`
   - 响应 200：单个项目文档对象，形状如下（字段名前后端共同遵守）：
     ```json
     {
@@ -64,9 +65,11 @@
         { "title": "…", "solution": "…" }
       ],
       "results": [ "量化成果…" ],
-      "link": ""
+      "link": "",
+      "skeleton": false
     }
     ```
+  - **骨架文档**：projectDocs 未命中但项目列表命中时返回合成文档，字段为 `name/slug/tagline(空)/stack/summary(第一条要点)/bullets(全部要点)/period/link + skeleton:true`，其余字段为空数组/空串；**前端须**：不渲染空章节，显示「详细内容整理中」印戳，不得展示编造成果。
   - `diagram` 指向 `public/assets/svg/` 下的结构图（由设计产出）；`link` 为可选开源/演示链接，空串表示暂无。
 
 ## 项目详情页路由 `GET /p/:slug`

@@ -163,6 +163,8 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: var(--a
   margin-top: 6px; font-family: var(--font-mono); font-size: 11px;
   color: var(--ink-2); word-break: break-all;
 }
+.img-url-field { margin-bottom: 10px; }
+.img-url-field input { width: 100%; }
 .img-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; margin: 10px 0 12px; }
 .img-pick { display: inline-block; cursor: pointer; }
 .img-width-row { display: flex; align-items: center; gap: 12px; margin-bottom: 4px; }

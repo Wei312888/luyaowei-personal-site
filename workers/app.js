@@ -7,6 +7,14 @@ import { Hono } from 'hono';
 import seedData from '../seed/content-seed.json';
 
 const CATEGORIES = ['projects', 'progress', 'campus', 'honors', 'internship'];
+// 项目 slug 兜底映射:按名称精确匹配(与 seed 保持一致),运行时查找与渲染共用
+const PROJECT_SLUG_BY_NAME = {
+  'EDA Agent 桥（嘉立创 EDA 扩展 + 网关 + MCP）': 'eda-agent-bridge',
+  'wei+ 嵌入式信号串口助手': 'wei-plus',
+  '周期信号测量分析装置（简易示波器）': 'signal-measurement-device',
+  '模拟信号无线收发机': 'wireless-transceiver',
+  '宽带混合信号分离与锁相重建系统': 'broadband-signal-separation'
+};
 const CATEGORY_LABELS = {
   projects: '项目经历',
   progress: '项目进展',
@@ -65,13 +73,18 @@ function parseCookies(req) {
 
 /* ---------- D1 存储 ---------- */
 
+const TECH_NOTES_KV = 'techNotes_json';
+const QUICK_KV = 'quick_questions_json';
+// 管理端表单不编辑的 v2 元字段：整体替换保存时若请求体缺这些键，沿用库里旧值（与 Node 版一致）
+const PROJECT_META_PRESERVE = ['slug', 'tier', 'line', 'param'];
+
 async function ensureSchema(db) {
   await db.exec('CREATE TABLE IF NOT EXISTS items (id INTEGER PRIMARY KEY AUTOINCREMENT, category TEXT NOT NULL, sort INTEGER NOT NULL DEFAULT 0, data TEXT NOT NULL, updated_at TEXT NOT NULL)');
   await db.exec('CREATE TABLE IF NOT EXISTS kv (key TEXT PRIMARY KEY, value TEXT)');
   const emptyItems = (await db.prepare('SELECT COUNT(*) AS n FROM items').first()).n === 0;
   const hasProfile = (await db.prepare('SELECT value FROM kv WHERE key = ?').bind('profile_json').first());
   if (emptyItems && !hasProfile) await importSeed(db);
-  // 幂等迁移:校园经历与 projectDocs(与 Node 版 migrate 一致)
+  // 幂等迁移:校园经历、projectDocs 增量合并、techNotes 知识库、quickQuestions、项目 v2 元字段（与 Node 版 migrate 一致）
   const now = new Date().toISOString();
   const campusCount = (await db.prepare("SELECT COUNT(*) AS n FROM items WHERE category='campus'").first()).n;
   if (campusCount === 0) {
@@ -79,8 +92,64 @@ async function ensureSchema(db) {
     const ins = db.prepare('INSERT INTO items(category, sort, data, updated_at) VALUES(?, ?, ?, ?)');
     list.forEach((item, i) => ins.bind('campus', i, JSON.stringify(stripId(item)), now).run());
   }
-  const projDocs = await db.prepare("SELECT value FROM kv WHERE key = 'projectDocs_json'").first();
-  if (!projDocs) await db.prepare('INSERT INTO kv(key, value) VALUES(?, ?)').bind('projectDocs_json', JSON.stringify(seedData.projectDocs || {})).run();
+  await mergeMissingSlugs(db, 'projectDocs_json', seedData.projectDocs);
+  await mergeMissingSlugs(db, TECH_NOTES_KV, seedData.techNotes);
+  const hasQuick = await db.prepare('SELECT value FROM kv WHERE key = ?').bind(QUICK_KV).first();
+  if (!hasQuick && Array.isArray(seedData.quickQuestions) && seedData.quickQuestions.length) {
+    await db.prepare('INSERT INTO kv(key, value) VALUES(?, ?)').bind(QUICK_KV, JSON.stringify(seedData.quickQuestions)).run();
+  }
+  await migrateProjectMetaWorkers(db, seedData.projects);
+}
+
+// kv 整包对象按缺失 slug 增量合并（幂等，不动既有条目）
+async function mergeMissingSlugs(db, key, source) {
+  if (!source || typeof source !== 'object' || Array.isArray(source)) return;
+  const row = await db.prepare('SELECT value FROM kv WHERE key = ?').bind(key).first();
+  if (!row) {
+    await db.prepare('INSERT INTO kv(key, value) VALUES(?, ?)').bind(key, JSON.stringify(source)).run();
+    return;
+  }
+  try {
+    const existing = JSON.parse(row.value);
+    if (!existing || typeof existing !== 'object' || Array.isArray(existing)) {
+      await db.prepare('INSERT INTO kv(key, value) VALUES(?, ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value').bind(key, JSON.stringify(source)).run();
+      return;
+    }
+    let changed = false;
+    for (const slug of Object.keys(source)) {
+      if (existing[slug] === undefined) { existing[slug] = source[slug]; changed = true; }
+    }
+    if (changed) {
+      await db.prepare('INSERT INTO kv(key, value) VALUES(?, ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value').bind(key, JSON.stringify(existing)).run();
+    }
+  } catch (e) {
+    /* 既有 kv 解析失败：保持现状 */
+  }
+}
+
+// 项目 v2 元字段（tier/line/param/period）：按 slug 匹配 seed，仅当字段缺失或为空时补全（幂等）
+async function migrateProjectMetaWorkers(db, seedProjects) {
+  const seedBySlug = {};
+  (Array.isArray(seedProjects) ? seedProjects : []).forEach((it) => { if (it && it.slug) seedBySlug[it.slug] = it; });
+  if (!Object.keys(seedBySlug).length) return;
+  const rows = await db.prepare("SELECT id, data FROM items WHERE category = 'projects' ORDER BY sort ASC, id ASC").all();
+  const upd = db.prepare('UPDATE items SET data = ?, updated_at = ? WHERE id = ?');
+  const now = new Date().toISOString();
+  for (const r of rows.results) {
+    let data;
+    try { data = JSON.parse(r.data); } catch (e) { continue; }
+    if (!data || typeof data !== 'object' || Array.isArray(data)) continue;
+    const seedItem = data.slug ? seedBySlug[data.slug] : null;
+    if (!seedItem) continue;
+    let changed = false;
+    for (const key of ['tier', 'line', 'param', 'period']) {
+      if (seedItem[key] && (data[key] === undefined || data[key] === null || data[key] === '')) {
+        data[key] = seedItem[key];
+        changed = true;
+      }
+    }
+    if (changed) await upd.bind(JSON.stringify(data), now, r.id).run();
+  }
 }
 
 function stripId(item) {
@@ -97,6 +166,12 @@ async function importSeed(db) {
     for (let i = 0; i < list.length; i++) await ins.bind(category, i, JSON.stringify(stripId(list[i])), now).run();
   }
   await db.prepare('INSERT INTO kv(key, value) VALUES(?, ?)').bind('projectDocs_json', JSON.stringify(seedData.projectDocs || {})).run();
+  if (seedData.techNotes && typeof seedData.techNotes === 'object') {
+    await db.prepare('INSERT INTO kv(key, value) VALUES(?, ?)').bind(TECH_NOTES_KV, JSON.stringify(seedData.techNotes)).run();
+  }
+  if (Array.isArray(seedData.quickQuestions) && seedData.quickQuestions.length) {
+    await db.prepare('INSERT INTO kv(key, value) VALUES(?, ?)').bind(QUICK_KV, JSON.stringify(seedData.quickQuestions)).run();
+  }
 }
 
 async function kvGet(db, key) {
@@ -117,6 +192,20 @@ async function getContent(db) {
     const rows = await db.prepare('SELECT id, data FROM items WHERE category = ? ORDER BY sort ASC, id ASC').bind(category).all();
     content[category] = rows.results.map((r) => ({ ...JSON.parse(r.data), id: Number(r.id) }));
   }
+  // 运行时补 slug:旧库项目条目可能没有 slug 字段,按名称映射补全(不落库,幂等)
+  (content.projects || []).forEach((it, i) => {
+    if (!it.slug) it.slug = PROJECT_SLUG_BY_NAME[it.name] || `p-${it.id || i + 1}`;
+  });
+  // v2 快捷问题：seed 维护的站点配置；kv 缺失时前端用内置默认值兜底
+  const quickRaw = await kvGet(db, QUICK_KV);
+  if (quickRaw) {
+    try {
+      const quick = JSON.parse(quickRaw);
+      if (Array.isArray(quick) && quick.length) content.quickQuestions = quick;
+    } catch (e) {
+      /* 解析失败则不下发 */
+    }
+  }
   return content;
 }
 
@@ -128,6 +217,37 @@ async function getProjectDoc(db, slug) {
   const docs = await getProjectDocs(db);
   return docs[slug] || null;
 }
+// 详情文档解析:优先 projectDocs;其次 seed 中的完整文档(旧库 projectDocs_json 可能
+// 缺 3 个硬件项目——种子回退保证部署/升级后自动补全,无需手工迁移 kv);
+// 仍未命中则在项目列表内按 slug(含名称兜底映射)查找,合成骨架文档;完全未命中返回 null
+async function getProjectDocOrSkeleton(db, slug) {
+  const doc = await getProjectDoc(db, slug);
+  if (doc) return doc;
+  const seedDoc = seedData.projectDocs && seedData.projectDocs[slug];
+  if (seedDoc) return seedDoc;
+  const projects = (await getContent(db)).projects || [];
+  const project = projects.find(
+    (it) => (it.slug && it.slug === slug) || PROJECT_SLUG_BY_NAME[it.name] === slug || slug === `p-${it.id}`
+  );
+  if (!project) return null;
+  return {
+    slug,
+    name: project.name || '',
+    tagline: '',
+    stack: project.stack || '',
+    summary: (Array.isArray(project.bullets) && project.bullets[0]) || '',
+    diagram: '',
+    architecture: [],
+    mcpTools: [],
+    httpEndpoints: [],
+    challenges: [],
+    results: [],
+    bullets: (Array.isArray(project.bullets) ? project.bullets : []).filter(Boolean),
+    period: project.period || '',
+    link: project.link || '',
+    skeleton: true
+  };
+}
 
 async function insertItem(db, category, body) {
   const { id, ...data } = body;
@@ -137,6 +257,22 @@ async function insertItem(db, category, body) {
 }
 async function updateItem(db, category, id, body) {
   const { id: ignored, ...data } = body;
+  if (category === 'projects') {
+    // 管理端表单只回传其声明的字段：保留 v2 元字段与 slug（请求体缺键时沿用库值，避免误删）
+    const row = await db.prepare('SELECT data FROM items WHERE category = ? AND id = ?').bind(category, id).first();
+    if (row) {
+      try {
+        const prev = JSON.parse(row.data);
+        if (prev && typeof prev === 'object' && !Array.isArray(prev)) {
+          for (const key of PROJECT_META_PRESERVE) {
+            if (prev[key] !== undefined && (data[key] === undefined || data[key] === null)) data[key] = prev[key];
+          }
+        }
+      } catch (e) {
+        /* 旧数据解析失败则不做合并保护 */
+      }
+    }
+  }
   const res = await db.prepare('UPDATE items SET data = ?, updated_at = ? WHERE category = ? AND id = ?').bind(JSON.stringify(data), new Date().toISOString(), category, id).run();
   return res.meta.changes > 0;
 }
@@ -221,9 +357,69 @@ function setSessionCookie(c, token) {
   c.header('Set-Cookie', `${COOKIE_NAME}=${token}; Path=/; HttpOnly; SameSite=Lax; Max-Age=${Math.floor(SEVEN_DAYS_MS / 1000)}`);
 }
 
+/* ---------- 技术知识库（techNotes，与 lib/techNotes.js 双路径同构） ---------- */
+
+async function getTechNotes(db) {
+  const raw = await kvGet(db, TECH_NOTES_KV);
+  if (!raw) return {};
+  try {
+    const parsed = JSON.parse(raw);
+    return parsed && typeof parsed === 'object' && !Array.isArray(parsed) ? parsed : {};
+  } catch (e) {
+    return {};
+  }
+}
+
+// 有序事实文本（facts 顺序即五段式：定位/链路/算法/指标/难点/收获）
+function noteFactsText(note) {
+  if (!note) return '';
+  const facts = Array.isArray(note.facts) ? note.facts : [];
+  const parts = [];
+  for (const f of facts) if (f && f.k && f.v) parts.push(`${f.k}：${f.v}`);
+  return parts.join('；');
+}
+
+function buildTechNotesSection(notes) {
+  const list = notes && typeof notes === 'object' && !Array.isArray(notes) ? Object.values(notes) : [];
+  if (!list.length) return '';
+  const lines = [
+    '【项目技术要点】（口径说明：站点公开口径与简历一致；原始技术报告记录仅作附注，不在主回答中主动混用；数据仍在整理中的如实说明）'
+  ];
+  let i = 0;
+  for (const n of list) {
+    const label = (n && n.label) || (n && n.slug) || '';
+    const contest = n && n.contest ? `（${n.contest}）` : '';
+    const text = noteFactsText(n);
+    if (!text) continue;
+    i += 1;
+    lines.push(`${i}. ${label}${contest}：${text}`);
+  }
+  return lines.join('\n');
+}
+
+// 离线兜底检索词条：与 collectEntries 同形状
+function techNoteEntries(notes) {
+  const list = notes && typeof notes === 'object' && !Array.isArray(notes) ? Object.values(notes) : [];
+  const entries = [];
+  for (const n of list) {
+    const label = (n && n.label) || (n && n.slug) || '';
+    if (!label) continue;
+    const facts = Array.isArray(n.facts) ? n.facts : [];
+    const pos = facts.find((f) => f && f.k === '定位');
+    const contest = n.contest ? `（${n.contest}）` : '';
+    entries.push({
+      label: `项目技术要点 · ${label}`,
+      summary: `${label}${contest}${pos && pos.v ? '：' + pos.v : ''}`,
+      blob: flatten(n).toLowerCase(),
+      aboutSelf: false
+    });
+  }
+  return entries;
+}
+
 /* ---------- 对话(SSE) ---------- */
 
-function buildSystemPrompt(content, extra) {
+function buildSystemPrompt(content, extra, techNotes) {
   const rules = [
     '你是个人求职网站的 AI 助手，代表站主陆耀威本人与访客对话。请严格遵守：',
     '1. 以第一人称「我」回答，「我」就是陆耀威本人，语气克制自然、真实谦逊。',
@@ -233,13 +429,13 @@ function buildSystemPrompt(content, extra) {
     '5. 回答保持简洁，不堆砌资料。',
     '',
     '【站点公开资料】',
-    serializeContent(content)
+    serializeContent(content, techNotes)
   ];
   if (extra && extra.trim()) rules.push('', '【补充说明（站主配置）】', extra.trim());
   return rules.join('\n');
 }
 
-function serializeContent(content) {
+function serializeContent(content, techNotes) {
   const lines = [];
   const p = content.profile || {};
   lines.push('【个人简介】');
@@ -248,11 +444,13 @@ function serializeContent(content) {
   if (p.selfEval) lines.push(`自我评价：${p.selfEval}`);
   if (p.education) lines.push(`教育背景：${p.education.school || ''} ${p.education.major || ''}（${p.education.period || ''}），${p.education.gpa || ''}；主修课程：${p.education.courses || ''}`);
   if (Array.isArray(p.skills) && p.skills.length) lines.push(`技能：${p.skills.map((s) => `${s.group}：${s.items}`).join('；')}`);
+  const techSection = buildTechNotesSection(techNotes);
   for (const category of Object.keys(CATEGORY_LABELS)) {
     const items = content[category] || [];
     lines.push('', `【${CATEGORY_LABELS[category]}】`);
-    if (!items.length) { lines.push('（暂无内容）'); continue; }
-    items.forEach((item, i) => lines.push(`${i + 1}. ${itemLine(category, item)}`));
+    if (!items.length) { lines.push('（暂无内容）'); } else { items.forEach((item, i) => lines.push(`${i + 1}. ${itemLine(category, item)}`)); }
+    // v2 ⑦ 知识库：项目经历之后紧跟【项目技术要点】（口径：对外=站点/简历口径）
+    if (category === 'projects' && techSection) lines.push('', techSection);
   }
   return lines.join('\n');
 }
@@ -318,7 +516,7 @@ function tokenize(message) {
   }
   return [...tokens];
 }
-function buildOfflineAnswer(content, message) {
+function buildOfflineAnswer(content, techNotes, message) {
   if (/(手机号|电话号码|住址|身份证|家庭住址|家人|父母)/.test(message)) {
     return `${OFFLINE_NOTE}\n抱歉，这类信息属于个人隐私，不方便在这里公开。如需联系我，请发送邮件至 ${SITE_EMAIL}。`;
   }
@@ -327,7 +525,9 @@ function buildOfflineAnswer(content, message) {
   }
   const tokens = tokenize(message);
   const aboutSelf = /你|自己|您|介绍|简历|背景|经历/.test(message);
-  const scored = collectEntries(content)
+  // v2 ⑦：六类内容词条 + 技术报告知识库词条（让“分辨率 / FIR / 调制度 / 锁相 / 毫伏级”等词离线也可命中）
+  const entries = collectEntries(content).concat(techNoteEntries(techNotes));
+  const scored = entries
     .map((entry) => ({ entry, score: aboutSelf && entry.aboutSelf ? 99 : scoreBlob(entry.blob, tokens) }))
     .filter((x) => x.score > 0)
     .sort((a, b) => b.score - a.score)
@@ -373,9 +573,9 @@ function sseResponse(streamFn) {
   });
 }
 
-async function streamFromAgent(content, message, history, apiKey, baseUrl, model, extra, send, done) {
+async function streamFromAgent(content, techNotes, message, history, apiKey, baseUrl, model, extra, send, done) {
   const messages = [
-    { role: 'system', content: buildSystemPrompt(content, extra) },
+    { role: 'system', content: buildSystemPrompt(content, extra, techNotes) },
     ...history,
     { role: 'user', content: message }
   ];
@@ -418,8 +618,8 @@ async function streamFromAgent(content, message, history, apiKey, baseUrl, model
   done();
 }
 
-async function streamOffline(content, message, send, done) {
-  const text = buildOfflineAnswer(content, message);
+async function streamOffline(content, techNotes, message, send, done) {
+  const text = buildOfflineAnswer(content, techNotes, message);
   for (let i = 0; i < text.length; i += 60) {
     send({ delta: text.slice(i, i + 60) });
     await sleep(30);
@@ -478,13 +678,14 @@ app.post('/api/chat', async (c) => {
     : [];
   const db = c.env.DB;
   const content = await getContent(db);
+  const techNotes = await getTechNotes(db);
   const apiKey = (await kvGet(db, 'agent_api_key')) || c.env.AGENT_API_KEY || '';
   const baseUrl = ((await kvGet(db, 'agent_base_url')) || DEFAULT_BASE_URL).replace(/\/+$/, '');
   const model = (await kvGet(db, 'agent_model')) || DEFAULT_MODEL;
   const extra = (await kvGet(db, 'system_prompt_extra')) || '';
   return sseResponse((send, done) => {
-    if (apiKey) streamFromAgent(content, message, history, apiKey, baseUrl, model, extra, send, done);
-    else streamOffline(content, message, send, done);
+    if (apiKey) streamFromAgent(content, techNotes, message, history, apiKey, baseUrl, model, extra, send, done);
+    else streamOffline(content, techNotes, message, send, done);
   });
 });
 
@@ -593,9 +794,9 @@ app.delete('/api/admin/:category/:id', requireAuth(), async (c) => {
   return c.json({ ok: true });
 });
 
-/* project docs(与 Node 版一致:seed 有 projectDocs 时可用) */
+/* project docs(与 Node 版一致:seed 有 projectDocs 可用;未命中时合成骨架文档) */
 app.get('/api/project/:slug', async (c) => {
-  const doc = await getProjectDoc(c.env.DB, c.req.param('slug'));
+  const doc = await getProjectDocOrSkeleton(c.env.DB, c.req.param('slug'));
   if (!doc) return c.json({ error: 'not found' }, 404);
   return c.json(doc);
 });

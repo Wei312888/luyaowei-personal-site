@@ -8,130 +8,221 @@
 <!-- SEO / Open Graph / 分享（og:image 指向克莱因蓝分享卡片） -->
 <meta property="og:title" content="陆耀威 · 嵌入式 × AI">
 <meta property="og:description" content="陆耀威的个人档案与项目记录，支持对话问答：AI Agent / 嵌入式 AI、EDA Agent 桥与 wei+ 串口助手等两大旗舰项目。">
-<meta property="og:image" content="https://luyaowei-site.3571334658.workers.dev/assets/svg/share-card.png">
-<meta property="og:url" content="https://luyaowei-site.3571334658.workers.dev/">
+<meta property="og:image" content="https://wei9930.cloud/assets/svg/share-card.png">
+<meta property="og:url" content="https://wei9930.cloud/">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="canonical" href="https://luyaowei-site.3571334658.workers.dev/">
+<link rel="canonical" href="https://wei9930.cloud/">
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"Person","name":"陆耀威","url":"https://luyaowei-site.3571334658.workers.dev/","jobTitle":"AI Agent 工程师 / 嵌入式 AI 工程师","email":"mailto:luyaowei9930@163.com","address":{"@type":"PostalAddress","addressLocality":"广西梧州"}}
+{"@context":"https://schema.org","@type":"Person","name":"陆耀威","url":"https://wei9930.cloud/","jobTitle":"AI Agent 工程师 / 嵌入式 AI 工程师","email":"mailto:luyaowei9930@163.com","address":{"@type":"PostalAddress","addressLocality":"广西梧州"}}
 </script>
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2064%2064'%3E%3Crect%20width='64'%20height='64'%20fill='%23002FA7'/%3E%3Ctext%20x='32'%20y='48'%20font-family='Noto%20Serif%20SC,SimSun,serif'%20font-size='42'%20fill='%23FAFAF7'%20text-anchor='middle'%3E%E9%99%86%3C/text%3E%3C/svg%3E">
 <link rel="stylesheet" href="/assets/site.css">
 </head>
 <body>
 
-<!-- 窄顶栏：品牌 + 编号目录 + 问问我（打开右下角浮层） -->
+<!-- 窄顶栏：品牌 + 编号目录（hash 路由 7 页）；无「问问我」按钮（入口在首页 AI 面板与右下浮层） -->
 <header class="site-head">
   <div class="head-inner">
-    <a class="brand" href="#top">
+    <a class="brand" href="#/home" aria-label="回到首页">
       <span class="brand-name">陆耀威</span>
-      <span class="brand-en">LU YAOWEI</span>
+      <span class="brand-en">LU YAOWEI · 蓝图档案</span>
     </a>
     <nav class="toc" id="toc" aria-label="编号目录">
-      <a href="#profile"><span class="num">01</span>个人</a>
-      <a href="#projects"><span class="num">02</span>项目</a>
-      <a href="#progress"><span class="num">03</span>进程</a>
-      <a href="#campus"><span class="num">04</span>校园</a>
-      <a href="#honors"><span class="num">05</span>荣誉</a>
-      <a href="#internship"><span class="num">06</span>实习</a>
+      <a href="#/home" data-page="home"><span class="num">01</span>首页</a>
+      <a href="#/overview" data-page="overview"><span class="num">02</span>全览</a>
+      <a href="#/projects" data-page="projects"><span class="num">03</span>项目</a>
+      <a href="#/progress" data-page="progress"><span class="num">04</span>进程</a>
+      <a href="#/campus" data-page="campus"><span class="num">05</span>校园</a>
+      <a href="#/honors" data-page="honors"><span class="num">06</span>获奖</a>
+      <a href="#/internship" data-page="internship"><span class="num">07</span>实习</a>
     </nav>
-    <button class="ask-btn" id="ask-open-head" type="button">问问我</button>
   </div>
+  <div class="ruler" aria-hidden="true"><span>0</span><span>6</span><span>12</span></div>
 </header>
 
 <main id="top">
-  <!-- AI-first 首屏：身份行(姓名/一句话卖点/元信息) + 大号常展开 AI 对话面板。
-       内容均由 GET /api/content 填充，HTML 不硬编码简历内容。 -->
-  <section class="hero" aria-label="开篇">
-    <h1 class="intro-name" id="intro-name"></h1>
-    <p class="intro-intent" id="intro-intent"></p>
-    <p class="intro-meta" id="intro-meta"></p>
-    <p class="load-error" id="load-error" hidden>内容加载失败，请稍后刷新。</p>
 
-    <!-- 大号常展开 AI 面板：首屏主角。与右下角浮层共用同一套消息渲染 / SSE 流式状态(createChatUI)。 -->
-    <div class="qa-hero" id="qa-hero">
-      <p class="qa-label">QUICK ASK · 依据站点公开内容回答</p>
-      <p class="qa-welcome">你好，我是陆耀威的站点分身。下面的公开内容——项目、技能、实习、校园经历——都可以问我。</p>
-      <form class="qa-form" id="qa-form">
-        <input id="qa-input" type="text" placeholder="有问题可以问陆耀威，直接输入…" autocomplete="off" aria-label="输入问题" maxlength="200">
-      </form>
-      <div class="qa-suggest" id="qa-suggest">
-        <button type="button" data-q="EDA Agent 桥是怎么工作的？">EDA Agent 桥是怎么工作的？</button>
-        <button type="button" data-q="wei+ 串口助手能做什么？">wei+ 串口助手能做什么？</button>
-        <button type="button" data-q="你会哪些技能？">你会哪些技能？</button>
+  <!-- ============ 01 首页：身份行 + AI 面板(F0) + 摘要/精选/板块入口 ============ -->
+  <section class="page" id="page-home" data-page="home" hidden>
+    <div class="hero blueprint-hero">
+      <div class="hero-grid" aria-hidden="true"></div>
+      <h1 class="intro-name" id="intro-name"></h1>
+      <p class="intro-intent" id="intro-intent"></p>
+      <p class="intro-meta" id="intro-meta"></p>
+      <svg class="hero-wave sig" data-sig="home" viewBox="0 0 640 64" aria-hidden="true" role="presentation" preserveAspectRatio="none">
+        <path class="sig-path" pathLength="1000" d="M0.0 32.0L6.7 29.1L13.3 26.3L20.0 23.6L26.7 21.0L33.3 18.6L40.0 16.4L46.7 14.5L53.3 12.9L60.0 11.7L66.7 10.7L73.3 10.2L80.0 10.0L86.7 10.2L93.3 10.7L100.0 11.7L106.7 12.9L113.3 14.5L120.0 16.4L126.7 18.6L133.3 21.0L140.0 23.6L146.7 26.3L153.3 29.1L160.0 32.0L166.7 34.9L173.3 37.7L180.0 40.4L186.7 43.0L193.3 45.4L200.0 47.6L206.7 49.5L213.3 51.1L220.0 52.3L226.7 53.3L233.3 53.8L240.0 54.0L246.7 53.8L253.3 53.3L260.0 52.3L266.7 51.1L273.3 49.5L280.0 47.6L286.7 45.4L293.3 43.0L300.0 40.4L306.7 37.7L313.3 34.9L320.0 32.0L326.7 29.1L333.3 26.3L340.0 23.6L346.7 21.0L353.3 18.6L360.0 16.4L366.7 14.5L373.3 12.9L380.0 11.7L386.7 10.7L393.3 10.2L400.0 10.0L406.7 10.2L413.3 10.7L420.0 11.7L426.7 12.9L433.3 14.5L440.0 16.4L446.7 18.6L453.3 21.0L460.0 23.6L466.7 26.3L473.3 29.1L480.0 32.0L486.7 34.9L493.3 37.7L500.0 40.4L506.7 43.0L513.3 45.4L520.0 47.6L526.7 49.5L533.3 51.1L540.0 52.3L546.7 53.3L553.3 53.8L560.0 54.0L566.7 53.8L573.3 53.3L580.0 52.3L586.7 51.1L593.3 49.5L600.0 47.6L606.7 45.4L613.3 43.0L620.0 40.4L626.7 37.7L633.3 34.9L640.0 32.0"
+          fill="none" stroke="currentColor" stroke-width="1.6"/>
+      </svg>
+
+      <!-- 大号常展开 AI 面板：首屏唯一主角。与浮层共用 createChatUI。 -->
+      <div class="qa-hero" id="qa-hero">
+        <div class="qa-label-row">
+          <p class="qa-label">QUICK ASK · 01 — 依据站点公开内容回答</p>
+          <svg class="qa-dots dots" data-dots="qa" viewBox="0 0 70 24" aria-hidden="true" role="presentation">
+            <circle cx="7"  cy="16" r="2"/>
+            <circle cx="21" cy="10" r="2"/>
+            <circle cx="35" cy="4"  r="2"/>
+            <circle cx="49" cy="10" r="2"/>
+            <circle cx="63" cy="16" r="2"/>
+          </svg>
+        </div>
+        <p class="qa-welcome">你好，我是陆耀威的站点分身。下面的公开内容——项目、技能、实习、校园经历——都可以问我。</p>
+        <form class="qa-form" id="qa-form">
+          <input id="qa-input" type="text" placeholder="有问题可以问陆耀威，直接输入…" autocomplete="off" aria-label="输入问题" maxlength="200">
+        </form>
+        <div class="qa-suggest" id="qa-suggest">
+          <button type="button" data-q="EDA Agent 桥是怎么工作的？">EDA Agent 桥是怎么工作的？</button>
+          <button type="button" data-q="wei+ 串口助手能做什么？">wei+ 串口助手能做什么？</button>
+          <button type="button" data-q="周期信号测量装置怎么做到毫伏级精度的？">周期信号测量装置怎么做到毫伏级精度的？</button>
+        </div>
+        <div class="qa-flow" id="qa-flow" hidden>
+          <div class="qa-msgs" id="qa-msgs"></div>
+          <p class="qa-foot">由陆耀威自建的个人AI向您回答</p>
+        </div>
       </div>
-      <div class="qa-flow" id="qa-flow" hidden>
-        <div class="qa-msgs" id="qa-msgs"></div>
-        <p class="qa-foot">由陆耀威自建的个人AI向您回答</p>
-      </div>
+      <p class="load-error" id="load-error" hidden>内容加载失败，请稍后刷新。</p>
+    </div>
+
+    <!-- 首页下移区：自我介绍 + 精选 + 六板块一行摘要入口 -->
+    <div class="home-feed">
+      <section class="home-block" id="home-about" aria-labelledby="t-home-about">
+        <header class="sec-head">
+          <p class="sec-no"><span class="no">01</span> / ABOUT</p>
+          <h2 id="t-home-about">自我介绍</h2>
+        </header>
+        <div class="frame"><div class="sec-body" data-body="home-about"></div></div>
+      </section>
+
+      <section class="home-block" id="home-projects" aria-labelledby="t-home-projects">
+        <header class="sec-head">
+          <p class="sec-no"><span class="no">02</span> / PROJECTS</p>
+          <h2 id="t-home-projects">项目</h2>
+        </header>
+        <div class="frame"><div class="sec-body" data-body="projects-home"></div></div>
+      </section>
+
+      <section class="home-block" id="home-index" aria-labelledby="t-home-index">
+        <header class="sec-head">
+          <p class="sec-no"><span class="no">03</span> / INDEX</p>
+          <h2 id="t-home-index">全部档案</h2>
+        </header>
+        <div class="frame"><div class="sec-body" data-body="home-index"></div></div>
+      </section>
     </div>
   </section>
 
-  <!-- 展示区：以下六类内容全部由 GET /api/content 动态渲染，位于 AI 面板下方 -->
-  <section id="profile" aria-labelledby="t-profile">
-    <header class="sec-head">
-      <p class="sec-no"><span class="no">01</span> / PROFILE</p>
-      <h2 id="t-profile">个人介绍</h2>
+  <!-- ============ 02 全览：六组索引（一级标题 + 二级标题 + 一行摘要 + 跳转） ============ -->
+  <section class="page" id="page-overview" data-page="overview" hidden>
+    <header class="page-head">
+      <p class="sec-no">02 / OVERVIEW</p>
+      <h1 class="page-title">全览</h1>
+      <p class="page-sub">六类档案一页看全：点任意条目直达对应板块页或详情页。</p>
+      <svg class="page-sig sig" data-sig="overview" viewBox="0 0 640 64" aria-hidden="true" role="presentation" preserveAspectRatio="none">
+        <path class="sig-path" pathLength="1000" d="M70.0 56.0L70.0 32.0M78.0 56.0L78.0 44.0M170.0 56.0L170.0 26.0M178.0 56.0L178.0 41.0M270.0 56.0L270.0 38.0M278.0 56.0L278.0 47.0M370.0 56.0L370.0 30.0M378.0 56.0L378.0 43.0M470.0 56.0L470.0 42.0M478.0 56.0L478.0 49.0M560.0 56.0L560.0 36.0M568.0 56.0L568.0 46.0"
+          fill="none" stroke="currentColor" stroke-width="1.5"/>
+      </svg>
     </header>
-    <div class="frame"><div class="sec-body" data-body="profile"></div></div>
+    <div id="ov-groups"></div>
   </section>
 
-  <section id="projects" aria-labelledby="t-projects">
-    <header class="sec-head">
-      <p class="sec-no"><span class="no">02</span> / PROJECTS</p>
-      <h2 id="t-projects">项目作品</h2>
+  <!-- ============ 03 项目：非均质卡片栅格 ============ -->
+  <section class="page" id="page-projects" data-page="projects" hidden>
+    <header class="page-head">
+      <p class="sec-no">03 / PROJECTS</p>
+      <h1 class="page-title">项目</h1>
+      <p class="page-sub">点击标题进入项目详情页；标题下方为完整项目地址。</p>
+      <svg class="page-sig sig" data-sig="projects" viewBox="0 0 640 64" aria-hidden="true" role="presentation" preserveAspectRatio="none">
+        <path class="sig-path" pathLength="1000" d="M0.0 32.0L6.7 15.7L13.3 10.0L20.0 12.9L26.7 15.3L33.3 13.5L40.0 12.0L46.7 13.3L53.3 14.5L60.0 13.4L66.7 12.4L73.3 13.4L80.0 14.4L86.7 13.4L93.3 12.4L100.0 13.4L106.7 14.5L113.3 13.3L120.0 12.0L126.7 13.5L133.3 15.3L140.0 12.9L146.7 10.0L153.3 15.7L160.0 32.0L166.7 48.3L173.3 54.0L180.0 51.1L186.7 48.7L193.3 50.5L200.0 52.0L206.7 50.7L213.3 49.5L220.0 50.6L226.7 51.6L233.3 50.6L240.0 49.6L246.7 50.6L253.3 51.6L260.0 50.6L266.7 49.5L273.3 50.7L280.0 52.0L286.7 50.5L293.3 48.7L300.0 51.1L306.7 54.0L313.3 48.3L320.0 32.0L326.7 15.7L333.3 10.0L340.0 12.9L346.7 15.3L353.3 13.5L360.0 12.0L366.7 13.3L373.3 14.5L380.0 13.4L386.7 12.4L393.3 13.4L400.0 14.4L406.7 13.4L413.3 12.4L420.0 13.4L426.7 14.5L433.3 13.3L440.0 12.0L446.7 13.5L453.3 15.3L460.0 12.9L466.7 10.0L473.3 15.7L480.0 32.0L486.7 48.3L493.3 54.0L500.0 51.1L506.7 48.7L513.3 50.5L520.0 52.0L526.7 50.7L533.3 49.5L540.0 50.6L546.7 51.6L553.3 50.6L560.0 49.6L566.7 50.6L573.3 51.6L580.0 50.6L586.7 49.5L593.3 50.7L600.0 52.0L606.7 50.5L613.3 48.7L620.0 51.1L626.7 54.0L633.3 48.3L640.0 32.0"
+          fill="none" stroke="currentColor" stroke-width="1.5"/>
+      </svg>
     </header>
-    <div class="frame"><div class="sec-body" data-body="projects"></div></div>
+    <div class="proj-grid" id="proj-grid"></div>
   </section>
 
-  <section id="progress" aria-labelledby="t-progress">
-    <header class="sec-head">
-      <p class="sec-no"><span class="no">03</span> / PROGRESS</p>
-      <h2 id="t-progress">项目进程</h2>
+  <!-- ============ 04 进程 ============ -->
+  <section class="page" id="page-progress" data-page="progress" hidden>
+    <header class="page-head">
+      <p class="sec-no">04 / PROGRESS</p>
+      <h1 class="page-title">进程</h1>
+      <p class="page-sub">各项目当前状态与说明。</p>
+      <svg class="page-sig sig" data-sig="progress" viewBox="0 0 640 64" aria-hidden="true" role="presentation" preserveAspectRatio="none">
+        <path class="sig-path" pathLength="1000" d="M0.0 10.0L8.0 11.1L16.0 12.2L24.0 13.3L32.0 14.4L40.0 15.5L48.0 16.6L56.0 17.7L64.0 18.8L72.0 19.9L80.0 21.0L88.0 22.1L96.0 23.2L104.0 24.3L112.0 25.4L120.0 26.5L128.0 27.6L136.0 28.7L144.0 29.8L152.0 30.9L160.0 32.0L168.0 33.1L176.0 34.2L184.0 35.3L192.0 36.4L200.0 37.5L208.0 38.6L216.0 39.7L224.0 40.8L232.0 41.9L240.0 43.0L248.0 44.1L256.0 45.2L264.0 46.3L272.0 47.4L280.0 48.5L288.0 49.6L296.0 50.7L304.0 51.8L312.0 52.9L320.0 54.0L320.0 10.0L328.0 11.1L336.0 12.2L344.0 13.3L352.0 14.4L360.0 15.5L368.0 16.6L376.0 17.7L384.0 18.8L392.0 19.9L400.0 21.0L408.0 22.1L416.0 23.2L424.0 24.3L432.0 25.4L440.0 26.5L448.0 27.6L456.0 28.7L464.0 29.8L472.0 30.9L480.0 32.0L488.0 33.1L496.0 34.2L504.0 35.3L512.0 36.4L520.0 37.5L528.0 38.6L536.0 39.7L544.0 40.8L552.0 41.9L560.0 43.0L568.0 44.1L576.0 45.2L584.0 46.3L592.0 47.4L600.0 48.5L608.0 49.6L616.0 50.7L624.0 51.8L632.0 52.9L640.0 54.0L640.0 10.0"
+          fill="none" stroke="currentColor" stroke-width="1.5"/>
+      </svg>
     </header>
     <div class="frame"><div class="sec-body" data-body="progress"></div></div>
   </section>
 
-  <section id="campus" aria-labelledby="t-campus">
-    <header class="sec-head">
-      <p class="sec-no"><span class="no">04</span> / CAMPUS</p>
-      <h2 id="t-campus">校园经历</h2>
+  <!-- ============ 05 校园 ============ -->
+  <section class="page" id="page-campus" data-page="campus" hidden>
+    <header class="page-head">
+      <p class="sec-no">05 / CAMPUS</p>
+      <h1 class="page-title">校园</h1>
+      <p class="page-sub">校园经历与社团组织工作。</p>
+      <svg class="page-sig sig" data-sig="campus" viewBox="0 0 640 64" aria-hidden="true" role="presentation" preserveAspectRatio="none">
+        <path class="sig-path" pathLength="1000" d="M0.0 10.0L6.7 11.8L13.3 13.7L20.0 15.5L26.7 17.3L33.3 19.2L40.0 21.0L46.7 22.8L53.3 24.7L60.0 26.5L66.7 28.3L73.3 30.2L80.0 32.0L86.7 33.8L93.3 35.7L100.0 37.5L106.7 39.3L113.3 41.2L120.0 43.0L126.7 44.8L133.3 46.7L140.0 48.5L146.7 50.3L153.3 52.2L160.0 54.0L166.7 52.2L173.3 50.3L180.0 48.5L186.7 46.7L193.3 44.8L200.0 43.0L206.7 41.2L213.3 39.3L220.0 37.5L226.7 35.7L233.3 33.8L240.0 32.0L246.7 30.2L253.3 28.3L260.0 26.5L266.7 24.7L273.3 22.8L280.0 21.0L286.7 19.2L293.3 17.3L300.0 15.5L306.7 13.7L313.3 11.8L320.0 10.0L326.7 11.8L333.3 13.7L340.0 15.5L346.7 17.3L353.3 19.2L360.0 21.0L366.7 22.8L373.3 24.7L380.0 26.5L386.7 28.3L393.3 30.2L400.0 32.0L406.7 33.8L413.3 35.7L420.0 37.5L426.7 39.3L433.3 41.2L440.0 43.0L446.7 44.8L453.3 46.7L460.0 48.5L466.7 50.3L473.3 52.2L480.0 54.0L486.7 52.2L493.3 50.3L500.0 48.5L506.7 46.7L513.3 44.8L520.0 43.0L526.7 41.2L533.3 39.3L540.0 37.5L546.7 35.7L553.3 33.8L560.0 32.0L566.7 30.2L573.3 28.3L580.0 26.5L586.7 24.7L593.3 22.8L600.0 21.0L606.7 19.2L613.3 17.3L620.0 15.5L626.7 13.7L633.3 11.8L640.0 10.0"
+          fill="none" stroke="currentColor" stroke-width="1.5"/>
+      </svg>
     </header>
     <div class="frame"><div class="sec-body" data-body="campus"></div></div>
   </section>
 
-  <section id="honors" aria-labelledby="t-honors">
-    <header class="sec-head">
-      <p class="sec-no"><span class="no">05</span> / HONORS</p>
-      <h2 id="t-honors">荣誉奖项</h2>
+  <!-- ============ 06 获奖 ============ -->
+  <section class="page" id="page-honors" data-page="honors" hidden>
+    <header class="page-head">
+      <p class="sec-no">06 / HONORS</p>
+      <h1 class="page-title">获奖</h1>
+      <p class="page-sub">竞赛与荣誉记录。</p>
+      <svg class="page-sig sig" data-sig="honors" viewBox="0 0 640 64" aria-hidden="true" role="presentation" preserveAspectRatio="none">
+        <path class="sig-path" pathLength="1000" d="M0.0 46.0L160.0 46.0L160.0 38.0L320.0 38.0L320.0 30.0L480.0 30.0L480.0 22.0L640.0 22.0"
+          fill="none" stroke="currentColor" stroke-width="1.5"/>
+      </svg>
     </header>
     <div class="frame"><div class="sec-body" data-body="honors"></div></div>
   </section>
 
-  <section id="internship" aria-labelledby="t-internship">
-    <header class="sec-head">
-      <p class="sec-no"><span class="no">06</span> / INTERNSHIP</p>
-      <h2 id="t-internship">实习经历</h2>
+  <!-- ============ 07 实习 ============ -->
+  <section class="page" id="page-internship" data-page="internship" hidden>
+    <header class="page-head">
+      <p class="sec-no">07 / INTERNSHIP</p>
+      <h1 class="page-title">实习</h1>
+      <p class="page-sub">实习经历与收获。</p>
+      <svg class="page-sig sig" data-sig="internship" viewBox="0 0 640 64" aria-hidden="true" role="presentation" preserveAspectRatio="none">
+        <path class="sig-path" pathLength="1000" d="M30.0 46.0L30.0 20.0L52.0 46.0L52.0 6.0L56.0 6.0L56.0 46.0L90.0 20.0L90.0 46.0L243.0 46.0L243.0 20.0L303.0 20.0L303.0 46.0L456.0 46.0L456.0 20.0L478.0 46.0L478.0 8.0L482.0 8.0L482.0 46.0L516.0 20.0L516.0 46.0L640.0 46.0"
+          fill="none" stroke="currentColor" stroke-width="1.5"/>
+      </svg>
     </header>
     <div class="frame"><div class="sec-body" data-body="internship"></div></div>
   </section>
+
 </main>
 
-<footer class="site-foot">
+<!-- 底部翻页导航：全站统一「翻档案」节奏 -->
+<footer class="page-nav-wrap">
+  <nav class="page-nav" id="page-nav" aria-label="翻页导航"></nav>
   <div class="foot-inner">
     <a class="foot-mail" id="foot-email" href="#" hidden></a>
     <p class="foot-note">本站由我自己搭建，内容在管理端维护。</p>
   </div>
 </footer>
 
-<!-- 对话入口（右下角固定） -->
+<!-- 对话入口（右下角固定，仅一级页展示；首页主角是 AI 面板，不放浮层） -->
 <button class="ask-fab" id="ask-open-fab" type="button">问问我</button>
 
-<!-- 对话浮层：纸面同风格，SSE 流式渲染，与首屏 AI 面板共用同一套实现 -->
+<!-- 对话浮层：蓝图同风格，SSE 流式渲染，与首屏 AI 面板共用 createChatUI -->
 <section class="chat-panel" id="chat-panel" hidden aria-label="站内问答">
   <header class="chat-head">
-    <p class="chat-title">问问我</p>
+    <div class="chat-title-row">
+      <p class="chat-title">问问我</p>
+      <svg class="chat-dots dots" data-dots="chat" viewBox="0 0 70 24" aria-hidden="true" role="presentation">
+        <circle cx="7"  cy="16" r="2"/>
+        <circle cx="21" cy="10" r="2"/>
+        <circle cx="35" cy="4"  r="2"/>
+        <circle cx="49" cy="10" r="2"/>
+        <circle cx="63" cy="16" r="2"/>
+      </svg>
+    </div>
     <button class="chat-close" id="chat-close" type="button">关闭</button>
   </header>
   <div class="chat-msgs" id="chat-msgs">
@@ -140,7 +231,7 @@
   <div class="chat-suggest" id="chat-suggest">
     <button type="button" data-q="EDA Agent 桥是怎么工作的？">EDA Agent 桥是怎么工作的？</button>
     <button type="button" data-q="wei+ 串口助手能做什么？">wei+ 串口助手能做什么？</button>
-    <button type="button" data-q="你会哪些技能？">你会哪些技能？</button>
+    <button type="button" data-q="周期信号测量装置怎么做到毫伏级精度的？">周期信号测量装置怎么做到毫伏级精度的？</button>
   </div>
   <form class="chat-form" id="chat-form">
     <input id="chat-input" type="text" placeholder="输入问题，回车发送" autocomplete="off" aria-label="输入问题">

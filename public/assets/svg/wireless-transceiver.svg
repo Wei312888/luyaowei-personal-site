@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" role="img" aria-labelledby="wireless-transceiver-title wireless-transceiver-desc" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif">
+  <title id="wireless-transceiver-title">模拟信号无线收发机 · 思维导图</title>
+  <desc id="wireless-transceiver-desc">模拟信号无线收发机:以根节点与 7 个一级分支(定位/链路/算法/指标/难点/测试实测/复盘)呈现项目全貌,内容按站点口径蒸馏。</desc>
+
+  <!-- 版头 -->
+  <g>
+    <text x="40" y="46" font-family="ui-monospace,&quot;SF Mono&quot;,Consolas,monospace" font-size="14" letter-spacing="2" fill="#002FA7">MIND MAP · 模拟信号无线收发机 · 2026 电赛 B 题</text>
+    <text x="40" y="92" font-family="&quot;Noto Serif SC&quot;,&quot;Songti SC&quot;,&quot;SimSun&quot;,serif" font-size="34" fill="#1A1A1A">模拟信号无线收发机</text>
+    <text x="40" y="120" font-size="13.5" fill="#6F6C64">STM32F103 + AD9959 + AD835 · AM 调制 20–30 MHz · 130 cm 完整传输</text>
+    <line x1="40" y1="140" x2="1160" y2="140" stroke="#E7E4DB" stroke-width="1"/>
+  </g>
+
+      <!-- 根 → 分支 连接线 -->
+      <polyline points="280,380 318,380 318,224 340,224" fill="none" stroke="#1A1A1A" stroke-width="1"/>
+      <polyline points="280,380 768,380 768,315 790,315" fill="none" stroke="#1A1A1A" stroke-width="1"/>
+      <polyline points="280,380 318,380 318,406 340,406" fill="none" stroke="#1A1A1A" stroke-width="1"/>
+      <polyline points="280,380 768,380 768,497 790,497" fill="none" stroke="#1A1A1A" stroke-width="1"/>
+      <polyline points="280,380 318,380 318,588 340,588" fill="none" stroke="#1A1A1A" stroke-width="1"/>
+      <polyline points="280,380 768,380 768,679 790,679" fill="none" stroke="#1A1A1A" stroke-width="1"/>
+      <polyline points="280,380 318,380 318,770 340,770" fill="none" stroke="#1A1A1A" stroke-width="1"/>
+    <!-- 根节点 -->
+    <g>
+      <rect x="36" y="305" width="244" height="150" fill="#FFFFFF" stroke="#002FA7" stroke-width="1.5"/>
+      <text x="52" y="331" font-family="ui-monospace,&quot;SF Mono&quot;,Consolas,monospace" font-size="10.5" letter-spacing="2" fill="#002FA7">PROJECT MIND MAP</text>
+      <text x="52" y="361" font-family="&quot;Noto Serif SC&quot;,&quot;Songti SC&quot;,&quot;SimSun&quot;,serif" font-size="19" fill="#1A1A1A">模拟信号</text>
+      <text x="52" y="387" font-family="&quot;Noto Serif SC&quot;,&quot;Songti SC&quot;,&quot;SimSun&quot;,serif" font-size="19" fill="#1A1A1A">无线收发机</text>
+    </g>
+    <g>
+      <rect x="340" y="140" width="400" height="168" fill="#FFFFFF" stroke="#E7E4DB"/>
+      <text x="356" y="166" font-family="ui-monospace,&quot;SF Mono&quot;,Consolas,monospace" font-size="11" letter-spacing="2" fill="#002FA7">01 / 定位与分工</text>
+      <text x="356" y="192" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">同信道 AM 无线传输:50 Hz–10 kHz 模拟信号、</text>
+      <text x="356" y="210" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">载波 20–30 MHz、带宽 ≤25 kHz、</text>
+      <text x="356" y="228" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">130 cm 完整传输(团队项目);</text>
+      <text x="356" y="246" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">本人负责发射端调制,接收端为团队协作</text>
+    </g>
+    <g>
+      <rect x="790" y="231" width="400" height="168" fill="#FFFFFF" stroke="#E7E4DB"/>
+      <text x="806" y="257" font-family="ui-monospace,&quot;SF Mono&quot;,Consolas,monospace" font-size="11" letter-spacing="2" fill="#002FA7">02 / 发射链路(本人)</text>
+      <text x="806" y="283" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">STM32 模拟 SPI 驱动 AD9959(CH0 载波/</text>
+      <text x="806" y="301" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">CH1 模拟信号) → AD835 四象限乘法器</text>
+      <text x="806" y="319" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">AM 调制 → ME5532 加法器叠直流偏置 →</text>
+      <text x="806" y="337" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">功放 → 50Ω 微带 → SMA 天线;</text>
+      <text x="806" y="355" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">接收端:LC 选频+LNA+OPA691+包络检波</text>
+    </g>
+    <g>
+      <rect x="340" y="322" width="400" height="168" fill="#FFFFFF" stroke="#E7E4DB"/>
+      <text x="356" y="348" font-family="ui-monospace,&quot;SF Mono&quot;,Consolas,monospace" font-size="11" letter-spacing="2" fill="#002FA7">03 / 核心算法与理论</text>
+      <text x="356" y="374" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">FTW=(f/500MHz)×2^32,分辨率约 0.119 Hz;</text>
+      <text x="356" y="392" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">调制度 m 由 V_DC=V_m/m 反算 12 位 DAC</text>
+      <text x="356" y="410" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">码,步进 5%,越界自动钳位告警;</text>
+      <text x="356" y="428" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">包络检波 RC:1/ωc≪RC≪1/ωm 且</text>
+      <text x="356" y="446" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">RC≤√(1−m²)/(m·ωm) 防惰性失真</text>
+    </g>
+    <g>
+      <rect x="790" y="413" width="400" height="168" fill="#FFFFFF" stroke="#E7E4DB"/>
+      <text x="806" y="439" font-family="ui-monospace,&quot;SF Mono&quot;,Consolas,monospace" font-size="11" letter-spacing="2" fill="#002FA7">04 / 关键指标</text>
+      <text x="806" y="465" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">调制度 20–90% 可调、误差 &lt;7%</text>
+      <text x="806" y="483" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">(实测 1.2–1.5%);载波误差 &lt;7%</text>
+      <text x="806" y="501" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">(实测 0.05–0.10%);</text>
+      <text x="806" y="519" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">130 cm 完整 AM 传输;50 Hz–10 kHz</text>
+      <text x="806" y="537" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">扩展满足 25 kHz 带宽</text>
+    </g>
+    <g>
+      <rect x="340" y="504" width="400" height="168" fill="#FFFFFF" stroke="#E7E4DB"/>
+      <text x="356" y="530" font-family="ui-monospace,&quot;SF Mono&quot;,Consolas,monospace" font-size="11" letter-spacing="2" fill="#002FA7">05 / 关键难点</text>
+      <text x="356" y="556" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">调制度精度与漂移 → 软件闭环算 DAC 码;</text>
+      <text x="356" y="574" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">DAC 越界 → 自动钳位 + LED 告警;</text>
+      <text x="356" y="592" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">现场可靠性 → 串口屏+按键+OLED 三冗余;</text>
+      <text x="356" y="610" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">检波失真 → RC 参数约束计算</text>
+    </g>
+    <g>
+      <rect x="790" y="595" width="400" height="168" fill="#FFFFFF" stroke="#E7E4DB"/>
+      <text x="806" y="621" font-family="ui-monospace,&quot;SF Mono&quot;,Consolas,monospace" font-size="11" letter-spacing="2" fill="#002FA7">06 / 测试与实测</text>
+      <text x="806" y="647" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">载波 20/25/30 MHz 误差 0.05–0.10%;</text>
+      <text x="806" y="665" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">调制度 20/50/90% → 21.2/48.5/88.7%;</text>
+      <text x="806" y="683" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">130 cm 完整传输解调无失真;</text>
+      <text x="806" y="701" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">50 Hz–10 kHz 频率扩展全达标</text>
+    </g>
+    <g>
+      <rect x="340" y="686" width="400" height="168" fill="#FFFFFF" stroke="#E7E4DB"/>
+      <text x="356" y="712" font-family="ui-monospace,&quot;SF Mono&quot;,Consolas,monospace" font-size="11" letter-spacing="2" fill="#002FA7">07 / 复盘与收获</text>
+      <text x="356" y="738" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">调通「DDS 频率合成 × 模拟乘法器 × 射频</text>
+      <text x="356" y="756" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">链路 × 包络检波」整条 AM 链路,发射端为</text>
+      <text x="356" y="774" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">链路核心;全数字调制度控制可复现性好;</text>
+      <text x="356" y="792" font-family="-apple-system,&quot;PingFang SC&quot;,&quot;Microsoft YaHei&quot;,sans-serif" font-size="11.5" fill="#1A1A1A">自制 PCB:50Ω 微带 + 完整地平面</text>
+    </g>
+  <!-- 页脚 -->
+  <text x="40" y="876" font-family="ui-monospace,&quot;SF Mono&quot;,Consolas,monospace" font-size="11" fill="#6F6C64">依据站点/简历口径(报告原始记录 110cm 档实测 112.0cm 仅作附注) · 技术报告:合并报告第二部分(B 题,2026.04)</text>
+</svg>

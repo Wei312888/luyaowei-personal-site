@@ -1,19 +1,30 @@
 /* ============================================================
-   陆耀威个人站 · 项目深度详情页(/p/:slug)
-   与访客端共用纸面极简 + 克莱因蓝视觉令牌，不得偏离：
-   无渐变、无投影、无圆角卡片、无 emoji、无居中大标语。
+   陆耀威个人站 · 项目详情页(/p/:slug)「蓝图档案」样式
+   与访客端共用令牌(见 docs/DESIGN_SPEC.md 2026-09 版)。
    ============================================================ */
 
 :root {
-  --bg: #FAFAF7;        /* 暖白纸底，全站唯一底色 */
-  --ink: #1A1A1A;       /* 墨黑正文 */
-  --ink-2: #6F6C64;     /* 次级文字（暖灰） */
-  --hairline: #E7E4DB;  /* 1px 细分隔线 */
-  --accent: #002FA7;    /* 克莱因蓝，唯一强调色 */
+  --bg: #FAFAF7;
+  --ink: #1A1A1A;
+  --ink-2: #6F6C64;
+  --hairline: #E7E4DB;
+  --accent: #002FA7;
+  --grid-faint: #DCD8CC;
+  --paper: #FFFFFF;
   --font-serif: "Noto Serif SC","Source Han Serif SC","Songti SC","SimSun",serif;
   --font-sans: -apple-system,"PingFang SC","Microsoft YaHei","Segoe UI",sans-serif;
   --font-mono: ui-monospace,"SF Mono",Consolas,"Cascadia Mono",monospace;
-  --head-h: 52px; /* 窄顶栏 */
+  --head-h: 52px;
+  /* v2 追加令牌（与一级页对齐，只增不改） */
+  --fx-fast: 150ms;
+  --fx-mid: 180ms;
+  --fx-out: 150ms;
+  --fx-enter: 240ms;
+  --ease-standard: cubic-bezier(.22, .61, .36, 1);
+  --ease-lift: cubic-bezier(.25, .55, .25, 1);
+  --lift-s: 0 2px 8px rgba(26, 26, 26, .09);
+  --lift-m: 0 4px 14px rgba(26, 26, 26, .12);
+  --lift-l: 0 6px 18px rgba(26, 26, 26, .14);
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -36,7 +47,7 @@ a { color: inherit; text-decoration: none; }
 button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
 ul { list-style: none; }
 
-/* ---- 窄顶栏 ---- */
+/* ---- 窄顶栏 + 刻度尺 ---- */
 .site-head {
   position: fixed; top: 0; left: 0; right: 0; z-index: 20;
   background: var(--bg);
@@ -49,6 +60,17 @@ ul { list-style: none; }
 .brand { display: flex; align-items: baseline; gap: 10px; white-space: nowrap; }
 .brand-name { font-family: var(--font-serif); font-size: 16px; font-weight: 600; letter-spacing: 0.08em; }
 .brand-en { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.16em; color: var(--ink-2); }
+.ruler {
+  height: 18px;
+  display: flex; justify-content: space-between; align-items: flex-end;
+  padding: 0 3px 2px;
+  font-family: var(--font-mono); font-size: 8px; line-height: 1;
+  letter-spacing: 0.05em; color: var(--ink-2);
+  background:
+    repeating-linear-gradient(90deg, var(--ink-2) 0 1px, transparent 1px calc(100% / 48)) left top / 100% 6px no-repeat,
+    repeating-linear-gradient(90deg, var(--ink-2) 0 1px, transparent 1px calc(100% / 8))  left top / 100% 8px no-repeat,
+    var(--bg);
+}
 .detail-nav {
   margin-left: auto; display: flex; align-items: center; gap: 8px;
   white-space: nowrap; overflow-x: auto; scrollbar-width: none;
@@ -60,13 +82,25 @@ ul { list-style: none; }
 .detail-nav-sep { color: var(--ink-2); }
 
 /* ---- 主体 ---- */
-.detail-main { max-width: 860px; margin: 0 auto; padding: calc(var(--head-h) + 56px) 24px 112px; }
+.detail-main { max-width: 860px; margin: 0 auto; padding: calc(var(--head-h) + 56px) 24px 96px; }
 .load-error { margin-top: 24px; font-size: 14px; color: var(--ink-2); }
 
-/* ---- 项目头 ---- */
+/* ---- 蓝图版头：网格底纹 + 波形（与首页 hero 同一语言） ---- */
+.blueprint-hero { position: relative; }
+.hero-grid {
+  position: absolute; inset: 0; pointer-events: none; z-index: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32'%3E%3Cpath d='M32 0H0V32' fill='none' stroke='%23DCD8CC' stroke-width='1'/%3E%3C/svg%3E");
+  opacity: 0.68; /* 与首页同语言：桌面网格图纸纹理清晰可见；移动端降浅见 @media 719px */
+}
+.doc-head > * { position: relative; z-index: 1; }
+
 .doc-head { padding-bottom: 40px; border-bottom: 1px solid var(--hairline); }
 .doc-kicker { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.2em; color: var(--ink-2); }
 .doc-kicker span { color: var(--accent); }
+.skeleton-mark {
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em;
+  color: var(--accent); border: 1px solid var(--accent); padding: 2px 8px; margin-left: 8px;
+}
 .doc-name {
   margin-top: 16px; font-family: var(--font-serif); font-weight: 600;
   font-size: clamp(30px, 5vw, 52px); line-height: 1.2; letter-spacing: 0.03em;
@@ -76,11 +110,53 @@ ul { list-style: none; }
   margin-top: 10px; font-family: var(--font-mono);
   font-size: 13px; letter-spacing: 0.02em; color: var(--ink-2);
 }
-.doc-summary {
-  margin-top: 32px; max-width: 44em; font-size: 16px; line-height: 2; text-align: justify;
+.hero-wave { display: block; width: min(360px, 66%); margin-top: 30px; color: var(--accent); } /* 与项目名同尺度的“签名”波形 */
+
+/* ---- 章节树（§4 左侧节点树 + 右侧内容区；等宽编号节点 + 1px 连线） ---- */
+.doc { position: relative; }
+.doc-tree {
+  margin-top: 34px; padding: 2px 0 26px;
+  border-bottom: 1px solid var(--hairline);
+}
+.tree-branch {
+  position: relative; padding: 3px 0 3px 22px;
+  border-left: 1px solid var(--hairline);
+}
+.tree-node {
+  position: relative; display: block; width: 100%; text-align: left;
+  margin: 4px 0; padding: 7px 10px 7px 6px;
+  font-family: var(--font-sans); font-size: 14px; line-height: 1.5;
+  border: 1px solid transparent; color: var(--ink-2);
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+.tree-node .tn-no { display: inline-block; min-width: 24px; font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.12em; color: var(--accent); }
+.tree-node:hover { color: var(--ink); border-color: var(--hairline); }
+.tree-node.current {
+  color: var(--accent); border-color: var(--accent); font-weight: 600;
+}
+/* 进场：节点依次点亮（dash/透明度由 JS 加 .lit 驱动） */
+.tree-node { opacity: 0; transform: translateY(6px); transition: opacity 0.3s ease, transform 0.3s ease, color 0.15s ease, border-color 0.15s ease; }
+.tree-node.lit { opacity: 1; transform: none; }
+
+/* 桌面(≥720px)：章节树为左侧吸顶导轨，摘要/编号节/骨架说明右移成内容区（§4） */
+@media (min-width: 720px) {
+  .doc-tree { position: sticky; top: 84px; width: 218px; }
+  /* 每节点与主树干之间补 1px 短横连线，构成可读的树形结构 */
+  .tree-node::before {
+    content: ""; position: absolute; left: -22px; top: 50%; width: 22px; height: 1px;
+    background: var(--hairline);
+  }
+  .doc-summary,
+  .doc-sec,
+  .doc-skeleton-note { margin-left: 246px; }
 }
 
-/* ---- 编号节：等宽编号 + 衬线大字，上下 1px 细线 ---- */
+/* ---- 摘要 ---- */
+.doc-summary {
+  margin-top: 34px; max-width: 44em; font-size: 16px; line-height: 2; text-align: justify;
+}
+
+/* ---- 编号节 ---- */
 .doc-sec { margin-top: 48px; }
 .sec-head {
   border-top: 1px solid var(--hairline);
@@ -94,8 +170,8 @@ ul { list-style: none; }
   font-size: clamp(22px, 3vw, 30px); letter-spacing: 0.06em;
 }
 
-/* ---- 架构图：1px 细线直角图框 ---- */
-.doc-diagram { margin-top: 36px; padding: 0; border: 1px solid var(--hairline); background: var(--bg); }
+/* ---- 架构图：1px 细线直角图框；轻微视差目标 ---- */
+.doc-diagram { margin-top: 36px; padding: 0; border: 1px solid var(--hairline); background: var(--paper); }
 .doc-diagram img { display: block; width: 100%; height: auto; }
 .arch-list { margin-top: 28px; counter-reset: arch; }
 .arch-list li {
@@ -115,9 +191,7 @@ ul { list-style: none; }
   display: grid; grid-template-columns: 1fr; gap: 4px;
   padding: 15px 0; border-bottom: 1px solid var(--hairline);
 }
-.tool-name {
-  font-family: var(--font-mono); font-size: 15px; font-weight: 600;
-}
+.tool-name { font-family: var(--font-mono); font-size: 15px; font-weight: 600; }
 .tool-meta { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.02em; color: var(--accent); }
 .tool-desc { font-size: 14px; color: var(--ink-2); line-height: 1.8; }
 
@@ -132,6 +206,14 @@ ul { list-style: none; }
 .bullets li { position: relative; padding-left: 1.5em; margin-bottom: 10px; font-size: 15px; line-height: 1.85; }
 .bullets li::before { content: "—"; position: absolute; left: 0; color: var(--ink-2); }
 
+/* ---- 骨架态说明 ---- */
+.doc-skeleton-note {
+  margin-top: 40px; padding: 14px 18px;
+  border: 1px dashed var(--grid-faint);
+  font-size: 13.5px; color: var(--ink-2); line-height: 1.9;
+}
+.doc-skeleton-note .skeleton-mark { display: inline-block; margin: 0 10px 0 0; }
+
 /* ---- 链接 ---- */
 .doc-link { margin-top: 28px; }
 .doc-link a {
@@ -143,19 +225,190 @@ ul { list-style: none; }
 .doc-link a::after { content: "↗"; font-family: var(--font-mono); font-size: 12px; }
 .doc-link a:hover { color: var(--accent); border-color: var(--accent); }
 
+/* ---- 底部：上/下项目翻页 ---- */
+.page-nav-wrap { margin-top: 72px; border-top: 1px solid var(--hairline); }
+.detail-pager {
+  max-width: 860px; margin: 0 auto; padding: 26px 24px 0;
+  display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+}
+.detail-pager a {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--font-mono); font-size: 12.5px; letter-spacing: 0.04em;
+  color: var(--ink); border: 1px solid var(--hairline); padding: 9px 15px;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+.detail-pager a:hover { color: var(--accent); border-color: var(--accent); }
+.detail-pager a:only-child { margin-left: auto; }
+.detail-pager .dp-empty {
+  font-family: var(--font-mono); font-size: 12.5px; color: var(--ink-2); padding: 9px 0;
+}
+
 /* ---- 页脚 ---- */
-.site-foot { margin-top: 80px; border-top: 1px solid var(--hairline); }
 .foot-inner {
-  max-width: 860px; margin: 0 auto; padding: 36px 24px 48px;
+  max-width: 860px; margin: 0 auto; padding: 30px 24px 48px;
   display: flex; justify-content: space-between; align-items: baseline; gap: 16px; flex-wrap: wrap;
 }
 .foot-note { font-size: 13px; color: var(--ink-2); }
+
+/* ---- 尊重系统减弱动效 ---- */
+@media (prefers-reduced-motion: reduce) {
+  body { scroll-behavior: auto; }
+  .tree-node { opacity: 1; transform: none; transition: none !important; }
+  .doc-diagram img, .hero-grid, .hero-wave { transition: none !important; }
+}
 
 /* ---- 窄屏 ---- */
 @media (max-width: 719px) {
   .head-inner { padding: 0 16px; gap: 12px; }
   .brand-en { display: none; }
-  .detail-main { padding: calc(var(--head-h) + 36px) 20px 80px; }
+  .ruler { display: none; }
+  .hero-grid { opacity: 0.42; } /* §7：移动端网格底纹降浅 */
+  .detail-main { padding: calc(var(--head-h) + 36px) 20px 64px; }
   .tool-list li { display: block; }
   .tool-meta { display: block; margin-bottom: 4px; }
+  /* 章节树移动端：纵向折叠卡片降级（§4/§7），去导轨与连线 */
+  .tree-branch { border-left: none; padding-left: 0; }
+  .tree-branch::before, .tree-node::before { display: none; }
+  .tree-node {
+    width: 100%; margin: 6px 0; padding: 10px 12px; font-size: 14px;
+    border: 1px solid var(--hairline); background: var(--paper);
+  }
+  .doc-summary, .doc-sec, .doc-skeleton-note { margin-left: 0; }
+  .detail-pager { padding: 20px 20px 0; }
+}
+
+/* ============================================================
+   v2 报告型章节（design-v2 §2-C）：版头元信息 / 指标表 / 测试块 /
+   理论难点复用 challenge-list / 资料清单 —— 复用蓝图 1px 细线语言
+   ============================================================ */
+
+/* 版头附加元信息：时间 / 赛题口径 / 分工（mono，可折行） */
+.doc-meta {
+  margin-top: 8px; max-width: 44em;
+  font-family: var(--font-mono); font-size: 12.5px; line-height: 1.8;
+  letter-spacing: 0.02em; color: var(--ink-2);
+}
+
+/* 关键指标表：4 列表格式网格（指标项 / 口径值 / 说明 / 来源） */
+.metrics-table { margin-top: 28px; border-top: 1px solid var(--hairline); }
+.m-row {
+  display: grid;
+  grid-template-columns: 150px minmax(140px, 0.9fr) minmax(140px, 1.1fr) 64px;
+  gap: 12px 18px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--hairline);
+  align-items: start;
+}
+.m-row.m-head {
+  padding: 9px 0;
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em; color: var(--ink-2);
+}
+.m-item { font-size: 14.5px; line-height: 1.7; }
+.m-value { font-size: 14.5px; font-weight: 600; line-height: 1.7; }
+.m-note { font-size: 13px; color: var(--ink-2); line-height: 1.75; }
+.m-src {
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.05em;
+  color: var(--accent); padding-top: 3px; white-space: nowrap;
+}
+
+/* 测试与实测：分组块 */
+.test-block { padding: 18px 0 4px; }
+.test-block + .test-block { border-top: 1px solid var(--hairline); }
+.test-title {
+  font-family: var(--font-mono); font-size: 12.5px; letter-spacing: 0.08em;
+  color: var(--ink); font-weight: 600;
+}
+.test-block .bullets { margin-top: 10px; }
+.test-block .bullets li { font-size: 14px; }
+
+/* 理论 / 难点条目（复用 challenge-item 语言，保证两模板观感一致） */
+#theory-list .challenge-item dt { font-family: var(--font-mono); font-size: 13px; letter-spacing: 0.04em; }
+
+/* 资料清单：名称 + 类型标签 + 附注 */
+.source-list { margin-top: 28px; border-top: 1px solid var(--hairline); }
+.source-item {
+  position: relative; padding: 14px 0 16px 2em;
+  border-bottom: 1px solid var(--hairline);
+}
+.source-item::before {
+  content: "↳"; position: absolute; left: 0; top: 13px;
+  font-family: var(--font-mono); font-size: 13px; color: var(--accent);
+}
+.source-label { font-size: 14.5px; line-height: 1.7; }
+.source-type {
+  display: inline-block; margin-top: 6px;
+  font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.12em;
+  color: var(--accent); border: 1px solid var(--accent); padding: 1px 7px;
+}
+.source-note { margin-top: 6px; font-size: 12.5px; color: var(--ink-2); line-height: 1.75; }
+
+/* 窄屏：指标表降为纵向条目（标题行隐藏），保证可读 */
+@media (max-width: 719px) {
+  .m-row { grid-template-columns: 1fr; gap: 2px 0; padding: 11px 0; }
+  .m-row.m-head { display: none; }
+  .m-value { font-weight: 700; }
+  .m-src { padding-top: 0; }
+  .doc-meta { font-size: 11.5px; }
+}
+
+/* ============================================================
+   v2 动效层（详情页：与一级页令牌对齐的 L1/L2 hover lift + 墨迹拖尾）
+   ============================================================ */
+.cursor-ink {
+  position: fixed; inset: 0; z-index: 4;
+  pointer-events: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  /* L1 文本链接（-1px）：返回导航 / 正文链接 */
+  .detail-nav a,
+  .detail-nav a:visited {
+    transition: color var(--fx-fast) ease, transform var(--fx-out) var(--ease-lift);
+  }
+  .detail-nav a:hover {
+    transform: translateY(-1px);
+    transition: color var(--fx-fast) ease, transform var(--fx-mid) var(--ease-lift);
+  }
+
+  /* L2 控件（-2px + --lift-s）：章节树节点 / 文档链接按钮 / 上下篇按钮 */
+  .tree-node,
+  .doc-link a,
+  .detail-pager a {
+    transition: color var(--fx-fast) ease, border-color var(--fx-fast) ease,
+      transform var(--fx-out) var(--ease-lift), box-shadow var(--fx-out) var(--ease-lift);
+  }
+  .tree-node {
+    transition: color var(--fx-fast) ease, border-color var(--fx-fast) ease,
+      transform var(--fx-out) var(--ease-lift), box-shadow var(--fx-out) var(--ease-lift),
+      opacity 0.3s ease;
+  }
+  .tree-node:hover,
+  .doc-link a:hover,
+  .detail-pager a:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--lift-s);
+  }
+  .tree-node:hover {
+    transition: color var(--fx-fast) ease, border-color var(--fx-fast) ease,
+      transform var(--fx-mid) var(--ease-lift), box-shadow var(--fx-mid) var(--ease-lift),
+      opacity 0.3s ease;
+  }
+  .doc-link a:hover,
+  .detail-pager a:hover {
+    transition: color var(--fx-fast) ease, border-color var(--fx-fast) ease,
+      transform var(--fx-mid) var(--ease-lift), box-shadow var(--fx-mid) var(--ease-lift);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  @media (hover: hover) and (pointer: fine) {
+    .detail-nav a:hover,
+    .tree-node:hover,
+    .doc-link a:hover,
+    .detail-pager a:hover {
+      transform: none !important;
+      box-shadow: none !important;
+    }
+  }
+  .cursor-ink { display: none !important; }
 }
