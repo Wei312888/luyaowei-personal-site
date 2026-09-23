@@ -974,10 +974,45 @@
   /* ---------- 对话：POST /api/chat，SSE 流式（与旧版一致，共用实现） ---------- */
   const scrollMsgs = (ctx) => { ctx.msgs.scrollTop = ctx.msgs.scrollHeight; };
 
+  // 轻量 Markdown 渲染（AI 回答用）：转义优先，支持 段落/无序·有序列表/标题/引用/粗体/斜体/行内代码。
+  // 不引入依赖（站点零 CDN 约束）；先整体转义再拼标签，杜绝注入。
+  function renderMd(text) {
+    const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    const inline = (s) => esc(s)
+      .replace(/`([^`\n]+)`/g, '<code>$1</code>')
+      .replace(/\*\*([^*\n]+)\*\*/g, '<strong>$1</strong>')
+      .replace(/(^|[^*])\*([^*\n]+)\*/g, '$1<em>$2</em>');
+    const lines = String(text || '').replace(/\r\n?/g, '\n').split('\n');
+    let html = '';
+    let list = null;
+    const closeList = () => { if (list) { html += '</' + list + '>'; list = null; } };
+    for (const raw of lines) {
+      const ul = raw.match(/^\s*[-*•]\s+(.*)$/);
+      const ol = raw.match(/^\s*\d+[.)]\s+(.*)$/);
+      if (ul || ol) {
+        const tag = ul ? 'ul' : 'ol';
+        if (list !== tag) { closeList(); html += '<' + tag + ' class="md-list">'; list = tag; }
+        html += '<li>' + inline((ul || ol)[1]) + '</li>';
+        continue;
+      }
+      closeList();
+      const h = raw.match(/^\s*#{1,6}\s+(.*)$/);
+      if (h) { html += '<p class="md-h">' + inline(h[1]) + '</p>'; continue; }
+      const q = raw.match(/^\s*>\s?(.*)$/);
+      if (q) { html += '<p class="md-quote">' + inline(q[1]) + '</p>'; continue; }
+      if (!raw.trim()) continue; // 空行仅作分段，段落间距由 CSS 控制
+      html += '<p>' + inline(raw) + '</p>';
+    }
+    closeList();
+    return html;
+  }
+
   function addMsg(ctx, role, text, cls) {
     const wrap = el('div', 'chat-msg ' + (cls || role));
     if (role) wrap.appendChild(el('p', 'who', role === 'user' ? '你' : 'AI'));
-    const textEl = el('p', 'text', text || '');
+    const textEl = el('p', 'text');
+    if (role === 'assistant' && text) textEl.innerHTML = renderMd(text);
+    else textEl.textContent = text || '';
     wrap.appendChild(textEl);
     ctx.msgs.appendChild(wrap);
     scrollMsgs(ctx);
@@ -1021,7 +1056,7 @@
         if (obj && obj.error) throw new Error(obj.error);
         if (obj && typeof obj.delta === 'string' && obj.delta) {
           full += obj.delta;
-          target.textContent = full;
+          target.innerHTML = renderMd(full);
           scrollMsgs(ctx);
         }
       }
@@ -1105,7 +1140,7 @@
     createChatUI({
       msgs: $('#qa-msgs'), suggest: $('#qa-suggest'),
       form: $('#qa-form'), input: $('#qa-input'),
-      sendBtn: null, flow: $('#qa-flow'),
+      sendBtn: $('#qa-send'), flow: $('#qa-flow'),
     });
 
     const panel = createChatUI({

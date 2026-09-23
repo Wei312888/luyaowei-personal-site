@@ -99,6 +99,49 @@ async function ensureSchema(db) {
     await db.prepare('INSERT INTO kv(key, value) VALUES(?, ?)').bind(QUICK_KV, JSON.stringify(seedData.quickQuestions)).run();
   }
   await migrateProjectMetaWorkers(db, seedData.projects);
+  await migrateHonorsCorrectionWorkers(db);
+  await migrateQuickQuestionsWorkers(db, seedData.quickQuestions);
+}
+
+// 奖项名次勘误（2026-09 站主确认真实名次）：按名称匹配，仅当仍为旧错值时改写（幂等，不动其它奖项）
+const HONOR_CORRECTIONS = [
+  { name: '第七届国际青年人工智能大赛 · 智能驾驶赛', wrong: '三等奖', right: '二等奖' },
+  { name: '全国大学生电子设计竞赛 广西赛区', wrong: '省级三等奖', right: '省级二等奖' }
+];
+async function migrateHonorsCorrectionWorkers(db) {
+  const rows = await db.prepare("SELECT id, data FROM items WHERE category = 'honors'").all();
+  const upd = db.prepare('UPDATE items SET data = ?, updated_at = ? WHERE id = ?');
+  const now = new Date().toISOString();
+  for (const r of rows.results) {
+    let data;
+    try { data = JSON.parse(r.data); } catch (e) { continue; }
+    if (!data || typeof data !== 'object') continue;
+    const fix = HONOR_CORRECTIONS.find((c) => c.name === data.name && data.detail === c.wrong);
+    if (fix) await upd.bind(JSON.stringify({ ...data, detail: fix.right }), now, r.id).run();
+  }
+}
+
+// quickQuestions 增量合并：seed 新增问题 append 到既有列表（保留站主自定义顺序，幂等）
+async function migrateQuickQuestionsWorkers(db, seedQuestions) {
+  if (!Array.isArray(seedQuestions) || !seedQuestions.length) return;
+  const row = await db.prepare('SELECT value FROM kv WHERE key = ?').bind(QUICK_KV).first();
+  if (!row) {
+    await db.prepare('INSERT INTO kv(key, value) VALUES(?, ?)').bind(QUICK_KV, JSON.stringify(seedQuestions)).run();
+    return;
+  }
+  try {
+    const existing = JSON.parse(row.value);
+    if (!Array.isArray(existing)) {
+      await kvSet(db, QUICK_KV, JSON.stringify(seedQuestions));
+      return;
+    }
+    const merged = existing.slice();
+    let changed = false;
+    for (const q of seedQuestions) {
+      if (!merged.includes(q)) { merged.push(q); changed = true; }
+    }
+    if (changed) await kvSet(db, QUICK_KV, JSON.stringify(merged));
+  } catch (e) { /* 解析失败保持现状 */ }
 }
 
 // kv 整包对象按缺失 slug 增量合并（幂等，不动既有条目）
@@ -127,10 +170,15 @@ async function mergeMissingSlugs(db, key, source) {
   }
 }
 
-// 项目 v2 元字段（tier/line/param/period）：按 slug 匹配 seed，仅当字段缺失或为空时补全（幂等）
+// 项目 v2 元字段（tier/line/param/period）：按 slug 或名称匹配 seed，仅当字段缺失或为空时补全（幂等）
 async function migrateProjectMetaWorkers(db, seedProjects) {
   const seedBySlug = {};
-  (Array.isArray(seedProjects) ? seedProjects : []).forEach((it) => { if (it && it.slug) seedBySlug[it.slug] = it; });
+  const seedByName = {};
+  (Array.isArray(seedProjects) ? seedProjects : []).forEach((it) => {
+    if (!it) return;
+    if (it.slug) seedBySlug[it.slug] = it;
+    if (it.name) seedByName[it.name] = it;
+  });
   if (!Object.keys(seedBySlug).length) return;
   const rows = await db.prepare("SELECT id, data FROM items WHERE category = 'projects' ORDER BY sort ASC, id ASC").all();
   const upd = db.prepare('UPDATE items SET data = ?, updated_at = ? WHERE id = ?');
@@ -139,9 +187,11 @@ async function migrateProjectMetaWorkers(db, seedProjects) {
     let data;
     try { data = JSON.parse(r.data); } catch (e) { continue; }
     if (!data || typeof data !== 'object' || Array.isArray(data)) continue;
-    const seedItem = data.slug ? seedBySlug[data.slug] : null;
+    // 旧库条目可能无 slug：按名称映射（PROJECT_SLUG_BY_NAME 一致口径），并补写 slug 持久化
+    const seedItem = (data.slug && seedBySlug[data.slug]) || (data.name && seedByName[data.name]) || null;
     if (!seedItem) continue;
     let changed = false;
+    if (!data.slug && seedItem.slug) { data.slug = seedItem.slug; changed = true; }
     for (const key of ['tier', 'line', 'param', 'period']) {
       if (seedItem[key] && (data[key] === undefined || data[key] === null || data[key] === '')) {
         data[key] = seedItem[key];
@@ -423,10 +473,12 @@ function buildSystemPrompt(content, extra, techNotes) {
   const rules = [
     '你是个人求职网站的 AI 助手，代表站主陆耀威本人与访客对话。请严格遵守：',
     '1. 以第一人称「我」回答，「我」就是陆耀威本人，语气克制自然、真实谦逊。',
-    '2. 只依据下方「站点公开资料」回答，资料中没有的内容一律不编造。',
+    '2. 只依据下方「站点公开资料」回答，资料中没有的内容一律不编造；数字、指标、奖项等级必须与资料完全一致。',
     '3. 站点公开资料之外的问题，或涉及隐私（手机号、住址、身份证、他人信息等）的问题，礼貌回避，并引导访客回到求职相关话题。',
     `4. 访客询问联系方式时，只提供邮箱：${SITE_EMAIL}。`,
-    '5. 回答保持简洁，不堆砌资料。',
+    '5. 回答保持简洁，不堆砌资料：先一句话直接回答问题，再按需补充 2–4 条要点；连续追问时不要重复已给过的内容。',
+    '6. 访客问「怎么样 / 值得吗 / 适合吗」这类评价问题时，基于资料给出有依据的判断，不空泛夸赞。',
+    '7. 回答末尾如果资料中有明显相关的延伸话题，可以用一句话提示访客可以继续问（例如项目细节、实习收获），不要每次都加。',
     '',
     '【站点公开资料】',
     serializeContent(content, techNotes)

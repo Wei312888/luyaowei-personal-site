@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>陆耀威 · 嵌入式 × AI</title>
-<meta name="description" content="陆耀威的个人档案与项目记录，支持对话问答：AI Agent / 嵌入式 AI、EDA Agent 桥、wei+ 串口助手等。">
+<meta name="description" content="陆耀威的个人档案与项目记录，支持对话问答：AI Agent / 嵌入式 AI、EDA Agent 桥、wei+ 串口助手、电赛信号处理项目等。">
 <!-- SEO / Open Graph / 分享（og:image 指向克莱因蓝分享卡片） -->
 <meta property="og:title" content="陆耀威 · 嵌入式 × AI">
 <meta property="og:description" content="陆耀威的个人档案与项目记录，支持对话问答：AI Agent / 嵌入式 AI、EDA Agent 桥与 wei+ 串口助手等两大旗舰项目。">
@@ -67,9 +67,10 @@
             <circle cx="63" cy="16" r="2"/>
           </svg>
         </div>
-        <p class="qa-welcome">你好，我是陆耀威的站点分身。下面的公开内容——项目、技能、实习、校园经历——都可以问我。</p>
+        <p class="qa-welcome">你好，我是陆耀威的站点分身。项目、技能、实习、校园经历这些公开内容，都可以直接问我——我会基于站上资料如实回答。</p>
         <form class="qa-form" id="qa-form">
           <input id="qa-input" type="text" placeholder="有问题可以问陆耀威，直接输入…" autocomplete="off" aria-label="输入问题" maxlength="200">
+          <button type="submit" id="qa-send">发送</button>
         </form>
         <div class="qa-suggest" id="qa-suggest">
           <button type="button" data-q="EDA Agent 桥是怎么工作的？">EDA Agent 桥是怎么工作的？</button>
@@ -226,7 +227,7 @@
     <button class="chat-close" id="chat-close" type="button">关闭</button>
   </header>
   <div class="chat-msgs" id="chat-msgs">
-    <div class="chat-msg chat-note"><p class="text">这里是陆耀威的站点分身，只依据本站公开内容回答。可以从下面的问题开始。</p></div>
+    <div class="chat-msg chat-note"><p class="text">这里是陆耀威的站点分身，只依据本站公开内容回答。可以从下面的问题开始，也可以直接输入。</p></div>
   </div>
   <div class="chat-suggest" id="chat-suggest">
     <button type="button" data-q="EDA Agent 桥是怎么工作的？">EDA Agent 桥是怎么工作的？</button>
